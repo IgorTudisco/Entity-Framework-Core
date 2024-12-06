@@ -9,6 +9,7 @@ internal class ScreenSoundContext : DbContext
 {
 
     public DbSet<Artista> Artistas { get; set; }
+    public DbSet<Musica> Musicas { get; set; }
 
     private string ConnectionString = "Data Source=IGOR-TUDISCO\\IGORTUDISCO;Initial Catalog=ScreenSound;Integrated Security=True;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
