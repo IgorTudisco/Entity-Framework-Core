@@ -9,7 +9,7 @@ internal class ArtistaDAL
     public IEnumerable<Artista> ListarArtistas()
     {
         var lista = new List<Artista>();
-        using var connection = new Connection().ObterConexao();
+        using var connection = new ScreenSoundContext().ObterConexao();
         connection.Open();
 
         string sql = "SELECT * FROM Artistas;";
@@ -34,7 +34,7 @@ internal class ArtistaDAL
 
     public void AdicionarArtista(Artista artista)
     {
-        using var connection = new Connection().ObterConexao();
+        using var connection = new ScreenSoundContext().ObterConexao();
         connection.Open();
 
         string sql = "INSERT INTO Artistas (Nome, FotoPerfil, Bio) VALUES (@nome, @perfilPadrão, @bio)";
@@ -52,7 +52,7 @@ internal class ArtistaDAL
     public void AtulaizaArtista(int id, Artista artista)
     {
 
-        using var connection = new Connection().ObterConexao();
+        using var connection = new ScreenSoundContext().ObterConexao();
         connection.Open();
 
         string sql = "UPDATE Artistas SET Nome = @nome, Bio = @bio WHERE Id = @id";
@@ -72,7 +72,7 @@ internal class ArtistaDAL
     public void ExcluirArtista(int id)
     {
 
-        using var connection = new Connection().ObterConexao();
+        using var connection = new ScreenSoundContext().ObterConexao();
         connection.Open();
 
         string sql = "DELETE FROM Artistas WHERE Id = @id";

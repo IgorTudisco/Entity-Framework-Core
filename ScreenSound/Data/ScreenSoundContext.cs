@@ -4,7 +4,7 @@ using ScreenSound.Modelos;
 
 namespace ScreenSound.Data;
 
-internal class Connection
+internal class ScreenSoundContext
 {
 
     private string ConnectionString = "Data Source=IGOR-TUDISCO\\IGORTUDISCO;Initial Catalog=ScreenSound;Integrated Security=True;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
