@@ -5,86 +5,45 @@ namespace ScreenSound.Data;
 
 internal class ArtistaDAL
 {
+    
+    private readonly ScreenSoundContext _context;
+
+    public ArtistaDAL(ScreenSoundContext context)
+    {
+        _context = context;
+    }
 
     public IEnumerable<Artista> ListarArtistas()
     {
-        var lista = new List<Artista>();
-        using var connection = new ScreenSoundContext().ObterConexao();
-        connection.Open();
-
-        string sql = "SELECT * FROM Artistas;";
-        SqlCommand cmd = new SqlCommand(sql, connection);
-        using SqlDataReader dataReader = cmd.ExecuteReader();
-
-        while (dataReader.Read())
-        {
-
-            string? nomeArtista = Convert.ToString(dataReader["Nome"]);
-            string? bioArtista = Convert.ToString(dataReader["Bio"]);
-            int idArtista = Convert.ToInt32(dataReader["Id"]);
-
-            Artista artista = new(nomeArtista, bioArtista) { Id = idArtista };
-
-            lista.Add(artista);
-        }
-
-        return lista;
-
+        return _context.Artistas.ToList();
     }
 
     public void AdicionarArtista(Artista artista)
     {
-        using var connection = new ScreenSoundContext().ObterConexao();
-        connection.Open();
-
-        string sql = "INSERT INTO Artistas (Nome, FotoPerfil, Bio) VALUES (@nome, @perfilPadrão, @bio)";
-        SqlCommand command = new SqlCommand(sql, connection);
-
-        command.Parameters.AddWithValue("@nome", artista.Nome);
-        command.Parameters.AddWithValue("@perfilPadrão", artista.FotoPerfil);
-        command.Parameters.AddWithValue("@bio", artista.Bio);
-
-        int retorno = command.ExecuteNonQuery();
-        Console.WriteLine($"Linhas afetadas: {retorno}");
-
+        _context.Add(artista);
+        _context.SaveChanges();
     }
 
-    public void AtulaizaArtista(int id, Artista artista)
+    public void AtulaizaArtista(Artista artista)
     {
-
-        using var connection = new ScreenSoundContext().ObterConexao();
-        connection.Open();
-
-        string sql = "UPDATE Artistas SET Nome = @nome, Bio = @bio WHERE Id = @id";
-        SqlCommand cmd = new SqlCommand(sql, connection);
-
-        cmd.Parameters.AddWithValue("@nome", artista.Nome);
-        cmd.Parameters.AddWithValue("@bio", artista.Bio);
-        cmd.Parameters.AddWithValue("@id", id);
-
-        int retorno = cmd.ExecuteNonQuery();
-        Console.WriteLine($"Linhas afetadas: {retorno}");
-        ListarArtistas();
-
+        _context.Update(artista);
+        _context.SaveChanges();
     }
 
 
-    public void ExcluirArtista(int id)
+    public void ExcluirArtista(Artista artista)
     {
-
-        using var connection = new ScreenSoundContext().ObterConexao();
-        connection.Open();
-
-        string sql = "DELETE FROM Artistas WHERE Id = @id";
-        SqlCommand command = new SqlCommand(sql, connection);
-
-        command.Parameters.AddWithValue("@id", id);
-
-        int retorno = command.ExecuteNonQuery();
-        Console.WriteLine($"Linhas afetadas: {retorno}");
-        ListarArtistas();
-
+        _context.Remove(artista);
+        _context.SaveChanges();
     }
 
+    public Artista? FindByName(string name)
+    {
+        // Tem esse outro jeito de fazer.
+        //return _context.Artistas.FirstOrDefault(a => a.Nome.Equals(name));
+
+        var artista = _context.Artistas.FirstOrDefault(findArtista => findArtista.Nome == name);
+        return artista;
+    }
 
 }

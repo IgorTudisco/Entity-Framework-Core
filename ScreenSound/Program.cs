@@ -5,18 +5,23 @@ using ScreenSound.Modelos;
 try
 {
 
-    var artistaDAL = new ArtistaDAL();
+    var context = new ScreenSoundContext();
+    var artistaDAL = new ArtistaDAL(context);
 
-    //artistaDAL.AdicionarArtista(new Artista("Linkin Park", "Numb"));
-    //artistaDAL.AtulaizaArtista(14, new Artista("Linkin Park", "Numb = Foda!"));
-    //artistaDAL.ExcluirArtista(13);
+    //artistaDAL.AdicionarArtista(new Artista("Silvana Estrada", "Te Guardo"));
+    //artistaDAL.AtulaizaArtista(new Artista("Silvana Estrada", "Te Guardo = Essa música é Foda!") { Id = 15 });
+    //artistaDAL.ExcluirArtista(new Artista("Silvana Estrada", "Te Guardo = Essa música é Foda!") { Id = 16 });
 
     var listaArtistas = artistaDAL.ListarArtistas();
 
     foreach ( var artista in listaArtistas)
     {
         Console.WriteLine(artista);
-    }    
+    }
+
+    Console.WriteLine("-----------------------------------------");
+    var findArtistaName = artistaDAL.FindByName("Silvana Estrada");
+    Console.WriteLine(findArtistaName);
 
 }
 catch (Exception ex)
