@@ -3,8 +3,8 @@ using ScreenSound.Menus;
 using ScreenSound.Modelos;
 
 var context = new ScreenSoundContext();
-var artistaDal = new ArtistaDAL(context);
-var musicaDal = new MusicaDAL(context);
+var artistaDal = new DAL<Artista>(context);
+var musicaDal = new DAL<Musica>(context);
 
 //var musicaNova = new Musica("Esquinas") ;
 //var musicaNova2 = new Musica("Petala") ;
@@ -25,7 +25,7 @@ foreach (var musica in listaDeMusicas)
 }
 
 Console.WriteLine("------------------------------------");
-var findMusicaName = musicaDal.FindByNameMusica("Pétala");
+var findMusicaName = artistaDal.FindBy(a => a.Nome.Equals("Pétala")); // No FindBy, por conta do tipo Func, temos que passar uma função no prarâmetro. 
 Console.WriteLine(findMusicaName);
 
 return;

@@ -1,14 +1,12 @@
 ﻿
-using ScreenSound.Modelos;
-
 namespace ScreenSound.Data;
 
-internal abstract class DAL<T> where T : class // Indicando que a ref de T será uma classe.
+internal class DAL<T> where T : class
 {
 
     protected readonly ScreenSoundContext _context;
 
-    protected DAL(ScreenSoundContext context)
+    public DAL(ScreenSoundContext context)
     {
         _context = context;
     }
@@ -36,7 +34,7 @@ internal abstract class DAL<T> where T : class // Indicando que a ref de T será
         _context.SaveChanges();
     }
 
-    public T? FindByName(Func<T, bool> condition)
+    public T? FindBy(Func<T, bool> condition)
     {
 
         var artista = _context.Set<T>().FirstOrDefault(condition);
