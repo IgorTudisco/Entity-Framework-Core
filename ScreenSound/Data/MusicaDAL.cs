@@ -11,11 +11,8 @@ namespace ScreenSound.Data;
 internal class MusicaDAL : DAL<Musica>
 {
 
-    private readonly ScreenSoundContext _context;
-
-    public MusicaDAL(ScreenSoundContext context)
+    public MusicaDAL(ScreenSoundContext context) : base(context)
     {
-        _context = context;
     }
 
     public override IEnumerable<Musica> Listar()
