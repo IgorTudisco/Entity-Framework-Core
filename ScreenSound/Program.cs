@@ -17,7 +17,7 @@ var musicaDal = new MusicaDAL(context);
 //var musicaNova2 = new Musica("Petala") { Id = 5 };
 //musicaDal.ExcluirMusica(musicaNova2);
 
-var listaDeMusicas = musicaDal.ListaMusica();
+var listaDeMusicas = musicaDal.Listar();
 
 foreach (var musica in listaDeMusicas)
 {

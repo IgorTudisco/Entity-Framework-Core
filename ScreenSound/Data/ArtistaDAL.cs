@@ -3,7 +3,7 @@ using ScreenSound.Modelos;
 
 namespace ScreenSound.Data;
 
-internal class ArtistaDAL
+internal class ArtistaDAL : DAL<Artista>
 {
     
     private readonly ScreenSoundContext _context;
@@ -13,25 +13,25 @@ internal class ArtistaDAL
         _context = context;
     }
 
-    public IEnumerable<Artista> ListarArtistas()
+    public override IEnumerable<Artista> Listar()
     {
         return _context.Artistas.ToList();
     }
 
-    public void AdicionarArtista(Artista artista)
+    public override void Adicionar(Artista artista)
     {
         _context.Add(artista);
         _context.SaveChanges();
     }
 
-    public void AtulaizaArtista(Artista artista)
+    public override void Atualizar(Artista artista)
     {
         _context.Update(artista);
         _context.SaveChanges();
     }
 
 
-    public void ExcluirArtista(Artista artista)
+    public override void Excluir(Artista artista)
     {
         _context.Remove(artista);
         _context.SaveChanges();

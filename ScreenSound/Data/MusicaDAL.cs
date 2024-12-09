@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ScreenSound.Data;
 
-internal class MusicaDAL
+internal class MusicaDAL : DAL<Musica>
 {
 
     private readonly ScreenSoundContext _context;
@@ -18,24 +18,24 @@ internal class MusicaDAL
         _context = context;
     }
 
-    public IEnumerable<Musica> ListaMusica()
+    public override IEnumerable<Musica> Listar()
     {
         return _context.Musicas.ToList();
     }
 
-    public void AdicionaMusica(Musica musica)
+    public override void Adicionar(Musica musica)
     {
         _context.Musicas.Add(musica);
         _context.SaveChanges();
     }
 
-    public void AtualizaMusica(Musica musica)
+    public override void Atualizar(Musica musica)
     {
         _context.Musicas.Update(musica);
         _context.SaveChanges();
     }
 
-    public void ExcluirMusica(Musica musica)
+    public override void Excluir(Musica musica)
     {
         _context.Remove(musica);
         _context.SaveChanges();
