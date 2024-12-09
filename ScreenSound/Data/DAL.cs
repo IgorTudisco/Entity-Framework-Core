@@ -36,7 +36,7 @@ internal abstract class DAL<T> where T : class // Indicando que a ref de T será
         _context.SaveChanges();
     }
 
-    public T? FindByName(Func<T, bool> condition) // O parâmetro recebe o Func que é um tipo/critério específico que representa uma função e nos devolve uma verificação
+    public T? FindByName(Func<T, bool> condition)
     {
 
         var artista = _context.Set<T>().FirstOrDefault(condition);
