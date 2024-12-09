@@ -5,7 +5,7 @@ namespace ScreenSound.Data;
 
 internal class ArtistaDAL : DAL<Artista>
 {
-    public ArtistaDAL(ScreenSoundContext context) : base(context) { } // Usando o contrutro que vem lá do DAL (Base = Super Classe)
+    public ArtistaDAL(ScreenSoundContext context) : base(context) { }
 
     public override IEnumerable<Artista> Listar()
     {
