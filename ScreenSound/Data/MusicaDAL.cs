@@ -10,14 +10,7 @@ namespace ScreenSound.Data;
 
 internal class MusicaDAL : DAL<Musica>
 {
-
     public MusicaDAL(ScreenSoundContext context) : base(context)
     {
     }
-
-    public Musica? FindByNameMusica(string name)
-    {
-        return _context.Musicas.FirstOrDefault(a => a.Nome.Equals(name));
-    }
-
 }
