@@ -17,18 +17,18 @@ var musicaDal = new DAL<Musica>(context);
 //var musicaNova2 = new Musica("Petala") { Id = 5 };
 //musicaDal.ExcluirMusica(musicaNova2);
 
-var listaDeMusicas = musicaDal.Listar();
+//var listaDeMusicas = musicaDal.Listar();
 
-foreach (var musica in listaDeMusicas)
-{
-    Console.WriteLine(musica);
-}
+//foreach (var musica in listaDeMusicas)
+//{
+//    Console.WriteLine(musica);
+//}
 
-Console.WriteLine("------------------------------------");
-var findMusicaName = artistaDal.FindBy(a => a.Nome.Equals("Pétala")); // No FindBy, por conta do tipo Func, temos que passar uma função no prarâmetro. 
-Console.WriteLine(findMusicaName);
+//Console.WriteLine("------------------------------------");
+//var findMusicaName = artistaDal.FindBy(a => a.Nome.Equals("Pétala")); // No FindBy, por conta do tipo Func, temos que passar uma função no prarâmetro. 
+//Console.WriteLine(findMusicaName);
 
-return;
+//return;
 
 Dictionary<int, Menu> opcoes = new();
 opcoes.Add(1, new MenuRegistrarArtista());
