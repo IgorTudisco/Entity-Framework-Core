@@ -14,7 +14,7 @@ namespace ScreenSound.Migrations
 
             migrationBuilder.InsertData("Artistas", new string[] { "Nome", "Bio", "FotoPerfil" }, new object[] { "Bryan Adams", "Bryan Guy Adams CC OBC (nascido em 5 de novembro de 1959) é um cantor e compositor canadense, músico, produtor musical e fotógrafo. Estima-se que ele tenha vendido entre 75 milhões e mais de 100 milhões de discos e singles em todo o mundo, colocando-o nalista dos artistas musicais mais vendidos.", "https://i.scdn.co/image/ab67616d0000b27305a41288f037a08fb45db5e2" });
 
-            migrationBuilder.InsertData("Artistas", new string[] { "Nome", "Bio", "FotoPerfil" }, new object[] { "Foo Fighters", "Foo Fighters é uma banda de rock alternativo americana formada por Dave Grohl em 1995.", "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png" });
+            migrationBuilder.InsertData("Artistas", new string[] { "Nome", "Bio", "FotoPerfil" }, new object[] { "Linkin Park", "Linkin Park é uma banda de rock dos Estados Unidos formada em Agoura Hills, Califórnia. A formação atual da banda inclui o vocalista e multi-instrumentista Mike Shinoda, o guitarrista Brad Delson, o baixista Dave Farrell, o DJ Joe Hahn, a vocalista Emily Armstrong e o baterista Colin Brittain.", "https://i.scdn.co/image/ab67616d0000b2735f1f51d14e8bea89484ecd1b" });
 
             migrationBuilder.InsertData("Artistas", new string[] { "Nome", "Bio", "FotoPerfil" }, new object[] { "Gilberto Gil", "Gilberto Passos Gil Moreira é um cantor, compositor, multi-instrumentista, produtor musical, político e escritor brasileiro.", "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png" });
 
