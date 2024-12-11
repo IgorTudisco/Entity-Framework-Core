@@ -36,10 +36,13 @@ internal class DAL<T> where T : class
 
     public T? FindBy(Func<T, bool> condition)
     {
-
         var artista = _context.Set<T>().FirstOrDefault(condition);
         return artista;
+    }
 
+    public IEnumerable<T> ListarPor(Func<T, bool> condicao)
+    {
+        return _context.Set<T>().Where(condicao);
     }
 
 }

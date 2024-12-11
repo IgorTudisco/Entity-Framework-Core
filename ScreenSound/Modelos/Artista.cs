@@ -30,6 +30,13 @@ public class Artista
         }
     }
 
+    public void ExibirBio()
+    {
+        Console.WriteLine($"Biografia  do artista {Nome}");
+
+        Console.WriteLine($"=> {Bio}");
+    }
+
     public override string ToString()
     {
         return $@"Id: {Id}

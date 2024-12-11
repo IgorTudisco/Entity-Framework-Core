@@ -69,3 +69,13 @@ internal class ScreenSoundContext : DbContext
  * (https://learn.microsoft.com/pt-br/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli)
  
  */
+
+/*
+ 
+ * Utilizamos o pacote Proxies para utilizar o carregamento lento de informações na aplicação. Ele permite que os recursos sejam utilizados
+ * realmente quando forem necessários, otimizando o processo e sendo bastante útil quando temos recursos mais custosos na aplicação.
+ 
+ * Para conhecer mais sobre o funcionamento do Proxies você pode acessar
+ * a documentação oficial. (https://learn.microsoft.com/en-us/ef/core/querying/related-data/lazy)
+ 
+ */

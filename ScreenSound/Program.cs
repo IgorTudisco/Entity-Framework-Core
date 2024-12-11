@@ -6,35 +6,13 @@ var context = new ScreenSoundContext();
 var artistaDal = new DAL<Artista>(context);
 var musicaDal = new DAL<Musica>(context);
 
-//var musicaNova = new Musica("Esquinas") ;
-//var musicaNova2 = new Musica("Petala") ;
-//musicaDal.AdicionaMusica(musicaNova);
-//musicaDal.AdicionaMusica(musicaNova2);
-
-//var musicaNova2 = new Musica("Pétala") { Id = 2 };
-//musicaDal.AtualizaMusica(musicaNova2);
-
-//var musicaNova2 = new Musica("Petala") { Id = 5 };
-//musicaDal.ExcluirMusica(musicaNova2);
-
-//var listaDeMusicas = musicaDal.Listar();
-
-//foreach (var musica in listaDeMusicas)
-//{
-//    Console.WriteLine(musica);
-//}
-
-//Console.WriteLine("------------------------------------");
-//var findMusicaName = artistaDal.FindBy(a => a.Nome.Equals("Pétala")); // No FindBy, por conta do tipo Func, temos que passar uma função no prarâmetro. 
-//Console.WriteLine(findMusicaName);
-
-//return;
-
 Dictionary<int, Menu> opcoes = new();
 opcoes.Add(1, new MenuRegistrarArtista());
 opcoes.Add(2, new MenuRegistrarMusica());
 opcoes.Add(3, new MenuMostrarArtistas());
 opcoes.Add(4, new MenuMostrarMusicas());
+opcoes.Add(5, new MenuMostrarBioArtista());
+opcoes.Add(6, new MenuMostrarMusicasPorAno());
 opcoes.Add(-1, new MenuSair());
 
 void ExibirLogo()
@@ -58,6 +36,8 @@ void ExibirOpcoesDoMenu()
     Console.WriteLine("Digite 2 para registrar a música de um artista");
     Console.WriteLine("Digite 3 para mostrar todos os artistas");
     Console.WriteLine("Digite 4 para exibir todas as músicas de um artista");
+    Console.WriteLine("Digite 5 para exibir A bio de um artista");
+    Console.WriteLine("Digite 6 para exibir as músicas por ano de lançamento");
     Console.WriteLine("Digite -1 para sair");
 
     Console.Write("\nDigite a sua opção: ");
