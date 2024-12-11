@@ -3,7 +3,7 @@ using ScreenSound.Modelos;
 
 namespace ScreenSound.Menus;
 
-internal class MenuRegistrarMusica : Menu
+public class MenuRegistrarMusica : Menu
 {
     public override void Executar(DAL<Artista> artistaDal)
     {
