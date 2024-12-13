@@ -35,6 +35,32 @@ app.MapPost("/Artistas", ([FromServices] DAL < Artista > dal, [FromBody] Artista
 
 });
 
+app.MapDelete("/Artistas/{id}", ([FromServices] DAL<Artista> dal, int id) =>
+{
+    var artista = dal.FindBy(a => a.Id == id);
+    if(artista is null) return Results.NotFound();
+
+    dal.Excluir(artista);
+    return Results.NoContent();
+
+});
+
+app.MapPut("/Artistas", ([FromServices] DAL<Artista> dal, [FromBody] Artista artista) =>
+{
+    var artistaAtualizar = dal.FindBy(a => a.Id == artista.Id);
+
+    if (artistaAtualizar is null) return Results.NotFound();
+
+    artistaAtualizar.Nome = artista.Nome;
+    artistaAtualizar.Bio = artista.Bio;
+    artistaAtualizar.FotoPerfil = artista.FotoPerfil;
+
+    return Results.Ok();
+
+});
+
+
+
 app.Run();
 
 
