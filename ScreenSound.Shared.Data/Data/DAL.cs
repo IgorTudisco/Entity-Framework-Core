@@ -1,4 +1,7 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+
 namespace ScreenSound.Data;
 
 public class DAL<T> where T : class
@@ -11,9 +14,27 @@ public class DAL<T> where T : class
         _context = context;
     }
 
+    public IEnumerable<T> QueryIncludes(params Expression<Func<T, object?>>[] includes)
+    {
+        IQueryable<T> query = _context.Set<T>();
+
+        // Aplica os includes dinâmicos
+        foreach (var include in includes)
+        {
+            query = query.Include(include);
+        }
+
+        return query.ToList();
+    }
+
     public IEnumerable<T> Listar()
     {
         return _context.Set<T>().ToList();
+    }
+
+    public IEnumerable<T> Listar(params Expression<Func<T, object?>>[] includes)
+    {
+        return QueryIncludes(includes);
     }
 
     public void Adicionar(T objeto)
@@ -40,11 +61,11 @@ public class DAL<T> where T : class
         return artista;
     }
 
-    public IEnumerable<T> ListarPor(Func<T, bool> condicao)
+    public IEnumerable<T> FindBy(Func<T, bool> condicao, params Expression<Func<T, object?>>[] includes)
     {
-        return _context.Set<T>().Where(condicao);
+        var list = QueryIncludes(includes);
+        return list.Where(condicao).ToList();
     }
-
 }
 
 
