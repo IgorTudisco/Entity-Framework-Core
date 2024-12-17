@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ScreenSound.API.Requests;
 using ScreenSound.Data;
 using ScreenSound.Modelos;
 
@@ -23,11 +24,11 @@ public static class ArtistasExtensions
             return Results.Ok(artista);
         });
 
-        app.MapPost("/Artistas", ([FromServices] DAL<Artista> dal, [FromBody] Artista artista) =>
+        app.MapPost("/Artistas", ([FromServices] DAL<Artista> dal, [FromBody] ArtistaRequest artistaRequest) =>
         {
+            var artista = new Artista(artistaRequest.nome, artistaRequest.bio);
             dal.Adicionar(artista);
             return Results.Ok(artista);
-
         });
 
         app.MapDelete("/Artistas/{id}", ([FromServices] DAL<Artista> dal, int id) =>
@@ -40,15 +41,15 @@ public static class ArtistasExtensions
 
         });
 
-        app.MapPut("/Artistas", ([FromServices] DAL<Artista> dal, [FromBody] Artista artista) =>
+        app.MapPut("/Artistas", ([FromServices] DAL<Artista> dal, [FromBody] ArtistaRequestEdit artistaRequestEdit) =>
         {
-            var artistaAtualizar = dal.FindBy(a => a.Id == artista.Id);
+            var artistaAtualizar = dal.FindBy(a => a.Id == artistaRequestEdit.Id);
 
             if (artistaAtualizar is null) return Results.NotFound();
 
-            artistaAtualizar.Nome = artista.Nome;
-            artistaAtualizar.Bio = artista.Bio;
-            artistaAtualizar.FotoPerfil = artista.FotoPerfil;
+            artistaAtualizar.Nome = artistaRequestEdit.nome;
+            artistaAtualizar.Bio = artistaRequestEdit.bio;
+            dal.Atualizar(artistaAtualizar);
 
             return Results.Ok();
 
