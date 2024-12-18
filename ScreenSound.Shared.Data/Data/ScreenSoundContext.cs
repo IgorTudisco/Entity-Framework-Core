@@ -2,6 +2,7 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using ScreenSound.Modelos;
+using ScreenSound.Shared.Models.Models;
 
 namespace ScreenSound.Data;
 
@@ -10,6 +11,7 @@ public class ScreenSoundContext : DbContext
 
     public DbSet<Artista> Artistas { get; set; }
     public DbSet<Musica> Musicas { get; set; }
+    public DbSet<Genero> Generos { get; set; }
 
     private string ConnectionString = "Data Source=IGOR-TUDISCO\\IGORTUDISCO;Initial Catalog=ScreenSoundV0;Integrated Security=True;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
