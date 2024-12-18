@@ -3,6 +3,7 @@ using ScreenSound.API.Requests;
 using ScreenSound.API.Response;
 using ScreenSound.Data;
 using ScreenSound.Modelos;
+using ScreenSound.Shared.Models.Models;
 
 namespace ScreenSound.API.Endpoints;
 
@@ -34,9 +35,13 @@ public static class MusicasExtensions
 
         app.MapPost("/Musicas", ([FromServices] DAL<Musica> dal, [FromBody] MusicaRequest musicaRequest) =>
         {
-            var musica = new Musica(musicaRequest.nome);
-            musica.Nome = musicaRequest.nome;
-            musica.AnoLancamento = musicaRequest.anoLancamento;
+            var musica = new Musica(musicaRequest.nome)
+            {
+                ArtistaId = musicaRequest.ArtistaId,
+                AnoLancamento = musicaRequest.anoLancamento,
+                Generos = musicaRequest.Generos is not null ? GeneroRequestConverter(musicaRequest.Generos) : new List<Genero>()
+            };
+
             dal.Adicionar(musica);
             return Results.Ok();
         });
@@ -70,6 +75,15 @@ public static class MusicasExtensions
         });
     }
 
+    private static ICollection<Genero> GeneroRequestConverter(ICollection<GeneroRequest> generos)
+    {
+        return generos.Select(a => RequestToEntity(a)).ToList();
+    }
+
+    private static Genero RequestToEntity(GeneroRequest genero)
+    {
+        return new Genero() { Nome = genero.Nome, Descricao = genero.Descricao };
+    }
     private static ICollection<MusicaResponse> EntityListToResponseList(IEnumerable<Musica> musicaList)
     {
         return musicaList.Select(a => EntityToResponse(a)).ToList();
