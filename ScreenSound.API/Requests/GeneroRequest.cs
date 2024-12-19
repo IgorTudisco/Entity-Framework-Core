@@ -1,3 +1,5 @@
-﻿namespace ScreenSound.API.Requests;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record GeneroRequest(string Nome, string Descricao);
+namespace ScreenSound.API.Requests;
+
+public record GeneroRequest([Required] string nome, string descricao);

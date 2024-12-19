@@ -39,7 +39,7 @@ public static class MusicasExtensions
             {
                 ArtistaId = musicaRequest.ArtistaId,
                 AnoLancamento = musicaRequest.anoLancamento,
-                Generos = musicaRequest.Generos is not null ? GeneroRequestConverter(musicaRequest.Generos) : new List<Genero>()
+                Generos = musicaRequest.generos is not null ? GeneroRequestConverter(musicaRequest.generos) : new List<Genero>()
             };
 
             dal.Adicionar(musica);
@@ -82,12 +82,9 @@ public static class MusicasExtensions
 
     private static Genero RequestToEntity(GeneroRequest genero)
     {
-        return new Genero() { Nome = genero.Nome, Descricao = genero.Descricao };
+        return new Genero() { Nome = genero.nome, Descricao = genero.descricao };
     }
-    private static ICollection<MusicaResponse> EntityListToResponseList(IEnumerable<Musica> musicaList)
-    {
-        return musicaList.Select(a => EntityToResponse(a)).ToList();
-    }
+    private static ICollection<MusicaResponse> EntityListToResponseList(IEnumerable<Musica> musicaList) => musicaList.Select(m => EntityToResponse(m)).ToList();
 
     private static MusicaResponse EntityToResponse(Musica musica)
     {
