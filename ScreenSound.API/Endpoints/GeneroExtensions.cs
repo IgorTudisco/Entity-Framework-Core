@@ -22,7 +22,7 @@ public static class GeneroExtensions
             var genero = dal.FindBy(g => g.Nome.ToUpper().Equals(nome.ToUpper()));
             if (genero is null)
             {
-                return Results.NotFound();
+                return Results.NotFound("Gênero não encontrado.");
             }
             var responseGenero = EntityToResponse(genero);
             return Results.Ok(responseGenero);
@@ -30,11 +30,7 @@ public static class GeneroExtensions
 
         app.MapPost("/Generos", ([FromServices] DAL<Genero> dal, [FromBody] GeneroRequest generoRequest) =>
         {
-            var genero = new Genero()
-            {
-                Nome = generoRequest.nome,
-                Descricao = generoRequest.descricao
-            };
+            var genero = RequestToEntity(generoRequest);
             dal.Adicionar(genero);
             return Results.Ok(genero);
         });
@@ -42,7 +38,7 @@ public static class GeneroExtensions
         app.MapDelete("/Generos/{id}", ([FromServices] DAL<Genero> dal, int id) =>
         {
             var genero = dal.FindBy(g => g.Id == id);
-            if (genero is null) return Results.NotFound();
+            if (genero is null) return Results.NotFound("Gênero para exclusão não encontrado.");
 
             dal.Excluir(genero);
             return Results.NoContent();
@@ -62,6 +58,11 @@ public static class GeneroExtensions
             return Results.Ok();
 
         });
+    }
+
+    private static Genero RequestToEntity(GeneroRequest generoRequest)
+    {
+        return new Genero() { Nome = generoRequest.nome, Descricao = generoRequest.descricao };
     }
 
     private static ICollection<GeneroResponse> EntityListToResponseList(IEnumerable<Genero> listaDeGeneros)
