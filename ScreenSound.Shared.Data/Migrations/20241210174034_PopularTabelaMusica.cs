@@ -12,7 +12,7 @@ namespace ScreenSound.Migrations
         {
             migrationBuilder.InsertData("Musicas", new string[] {"Nome", "AnoLancamento"}, new object[] { "Samurai", 1982});
             migrationBuilder.InsertData("Musicas", new string[] { "Nome", "AnoLancamento" }, new object[] { "A Dança", 2024 });
-            migrationBuilder.InsertData("Musicas", new string[] { "Nome", "AnoLancamento" }, new object[] { "(Everything I Do) I Do It For You (tradução) ", 1991 });
+            migrationBuilder.InsertData("Musicas", new string[] { "Nome", "AnoLancamento" }, new object[] { "(Everything I Do) I Do It For You", 1991 });
             migrationBuilder.InsertData("Musicas", new string[] { "Nome", "AnoLancamento" }, new object[] { "Somewhere I Belong", 2003 });
         }
 
