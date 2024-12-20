@@ -1,4 +1,5 @@
-﻿using ScreenSound.Data;
+﻿using Microsoft.Extensions.Options;
+using ScreenSound.Data;
 using ScreenSound.Modelos;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ public class MenuMostrarMusicasPorAno : Menu
         ExibirTituloDaOpcao("Mostrar musicas por ano de lançamento");
         Console.Write("Digite o ano para consultar músicas:");
         string anoLancamento = Console.ReadLine()!;
-        var musicaDal = new DAL<Musica>(new ScreenSoundContext());
+        var musicaDal = new DAL<Musica>();
         var listaAnoLancamento = musicaDal.FindBy(a => a.AnoLancamento == Convert.ToInt32(anoLancamento), m => m.Artista);
         if (listaAnoLancamento.Any())
         {

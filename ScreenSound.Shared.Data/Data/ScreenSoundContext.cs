@@ -14,11 +14,9 @@ public class ScreenSoundContext : DbContext
     public DbSet<Genero> Generos { get; set; }
 
     private string ConnectionString = "Data Source=IGOR-TUDISCO\\IGORTUDISCO;Initial Catalog=ScreenSoundV0;Integrated Security=True;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+    public ScreenSoundContext() { }
 
-    public ScreenSoundContext(DbContextOptions options) : base(options)
-    {
-        
-    }
+    public ScreenSoundContext(DbContextOptions options) : base(options) { }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
