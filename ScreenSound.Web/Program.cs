@@ -12,7 +12,7 @@ builder.Services.AddTransient<ArtistaAPI>();
 builder.Services.AddHttpClient("API", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["APIServer:Url"]);
-    client.DefaultRequestHeaders.Add("Accept", "application/Json");
+    client.DefaultRequestHeaders.Add("Aceppt", "application/Json");
 });
 
 await builder.Build().RunAsync();
