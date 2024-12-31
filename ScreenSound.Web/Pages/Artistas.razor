@@ -1,6 +1,6 @@
 ﻿@page "/artistas"
 
-@inject ArtistaAPI artistaAPI
+@inject ArtistasAPI artistaAPI
 
 <h3>Artistas</h3>
 @if (artistas is not null)
@@ -10,7 +10,12 @@
         <p>@artista.Nome</p>
     }
 }
-
+else
+{
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+}
 
 @code {
     private ICollection<ArtistaResponse>? artistas;

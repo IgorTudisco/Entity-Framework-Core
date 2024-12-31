@@ -3,11 +3,11 @@ using System.Net.Http.Json;
 
 namespace ScreenSound.Web.Services;
 
-public class ArtistaAPI
+public class ArtistasAPI
 {
     private readonly HttpClient _httpClient;
 
-    public ArtistaAPI(IHttpClientFactory factory)
+    public ArtistasAPI(IHttpClientFactory factory)
     {
         _httpClient = factory.CreateClient("API");
     }
