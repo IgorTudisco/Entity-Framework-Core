@@ -40,6 +40,8 @@ app.UseCors(x => x.AllowAnyMethod()
                 .AllowCredentials()
 );
 
+app.UseStaticFiles();
+
 app.Run();
 
 

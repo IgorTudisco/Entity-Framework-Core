@@ -69,7 +69,7 @@
 
     private async Task Edit()
     {
-        artistaRequestEdit = new ArtistaRequestEdit(Artista!.Id, nome!, biografia!);
+        artistaRequestEdit = new ArtistaRequestEdit(Artista!.Id, nome!, biografia!, Artista!.FotoPerfil);
         await artistasAPI.EditArtistaAsync(artistaRequestEdit!);
         navigationManager.NavigateTo("/Artistas");
     }

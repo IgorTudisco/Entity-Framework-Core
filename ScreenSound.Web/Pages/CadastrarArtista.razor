@@ -10,47 +10,47 @@
     <MudForm>
 
         <MudTextField Class="mt-4" T="string" Placeholder="Nome do Artista"
-                      Variant="Variant.Outlined"
-                      @bind-Value="nome"
-                      Required="true"
-                      RequiredError="Campo obrigatório." />
+        Variant="Variant.Outlined"
+        @bind-Value="nome"
+        Required="true"
+        RequiredError="Campo obrigatório." />
 
         <MudTextField Class="mt-4" T="string" Placeholder="Biografia do artista"
-                      Variant="Variant.Outlined"
-                      @bind-Value="biografia"
-                      Lines="4"
-                      Required="true"
-                      RequiredError="Campo obrigatório." />
+        Variant="Variant.Outlined"
+        @bind-Value="biografia"
+        Lines="4"
+        Required="true"
+        RequiredError="Campo obrigatório." />
 
         <MudImage Class="mt-4" src="@fileImage" />
         <MudFileUpload T="IBrowserFile" Accept=".jpeg" FilesChanged="UploadFile">
             <ButtonTemplate>
                 <MudButton HtmlTag="label"
-                           Variant="Variant.Filled"
-                           Color="Color.Primary"
-                           StartIcon="@Icons.Material.Filled.PhotoCamera"
-                           for="@context">
+                Variant="Variant.Filled"
+                Color="Color.Primary"
+                StartIcon="@Icons.Material.Filled.PhotoCamera"
+                for="@context">
                     Foto de Perfil
                 </MudButton>
             </ButtonTemplate>
         </MudFileUpload>
 
         <div class="d-flex justify-space-between mt-4">
-            
+
             <MudButton Variant="Variant.Filled"
-                        OnClick="Voltar"
-                        Color="Color.Primary"
-                        Class="w-100">
+            OnClick="Voltar"
+            Color="Color.Primary"
+            Class="w-100">
                 Voltar
             </MudButton>
-            
+
             <MudButton Variant="Variant.Filled"
-                        OnClick="Cadastrar"
-                        Color="Color.Primary"
-                        Class="w-100">
+            OnClick="Cadastrar"
+            Color="Color.Primary"
+            Class="w-100">
                 Cadastrar
             </MudButton>
-            
+
         </div>
 
     </MudForm>
@@ -61,9 +61,11 @@
     private string? biografia;
     private string? fileImage;
 
+    private string? fotoPerfil;
+
     private async Task Cadastrar()
     {
-        var request = new ArtistaRequest(nome!, biografia!);
+        var request = new ArtistaRequest(nome!, biografia!, fotoPerfil!);
         await artistasAPI.AddArtistaAsync(request);
         navigationManager.NavigateTo("/Artistas");
     }
@@ -78,7 +80,9 @@
         using var memoryStream = new MemoryStream();
         await fileStream.CopyToAsync(memoryStream);
 
-        fileImage = $"data:{format};base64,{Convert.ToBase64String(memoryStream.ToArray())}";
+        var imagemUpload = Convert.ToBase64String(memoryStream.ToArray());
+        fileImage = $"data:{format};base64,{imagemUpload}";
+        fotoPerfil = imagemUpload;
     }
 
     private void Voltar()
