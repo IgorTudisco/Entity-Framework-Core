@@ -28,6 +28,11 @@ public class ArtistasAPI
         await _httpClient.DeleteAsync($"artistas/{id}");
     }
 
+    public async Task EditArtistaAsync(ArtistaRequestEdit artistaRequestEdit)
+    {
+        await _httpClient.PutAsJsonAsync("artistas", artistaRequestEdit);
+    }
+
     public async Task<ArtistaResponse?> GetArtistaPorNomeAsync(string nome)
     {
         return await _httpClient.GetFromJsonAsync<ArtistaResponse>($"artistas/{nome}");
