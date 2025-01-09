@@ -1,5 +1,143 @@
-﻿<h3>CadastrarMusica</h3>
+﻿@page "/CadastrarMusica"
+
+@inject ArtistasAPI artistasAPI
+@inject GeneroAPI generoAPI
+@inject MusicasAPI musicaAPI
+@inject NavigationManager navigationManager
+
+<MudPaper Class="px-8 pt-2 pb-4 mx-12 my-8" Justify="Justify.Center">
+
+    <MudText Class="mt-8" Typo="Typo.h4">Cadastro de Música</MudText>
+
+    <MudForm @ref="form">
+        <MudTextField Class="mt-4"
+                      T="string"
+                      Placeholder="Nome da música/canção"
+                      @bind-Value="nome"
+                      Variant="Variant.Outlined"
+                      Required="true"
+                      RequiredError="Campo obrigatório." />
+
+        <MudSelect Class="mt-4"
+                   T="ArtistaResponse"
+                   Label="Artistas"
+                   Variant="Variant.Outlined"
+                   AnchorOrigin="Origin.BottomCenter"
+                   @bind-Value="ArtistaDaMusica">
+            @if (artistas is not null)
+            {
+                @foreach (var artista in artistas)
+                {
+                    <MudSelectItem Value="@artista">@artista.Nome</MudSelectItem>
+                }
+            }
+        </MudSelect>
+
+        <MudNumericField Class="mt-4"
+                         Placeholder="Ano de lançamento"
+                         @bind-Value="anoLancamento"
+                         Variant="Variant.Outlined"
+                         Lines="1"
+                         Required="true"
+                         RequiredError="Campo obrigatório." />
+
+        <MudSelect Class="mt-4"
+                   T="GeneroResponse"
+                   Label="Gêneros"
+                   Variant="Variant.Outlined"
+                   AnchorOrigin="Origin.BottomCenter"
+                   ValueChanged="GeneroSelecionado">
+            @if (generos is not null)
+            {
+                @foreach (var genero in generos)
+                {
+                    <MudSelectItem Value="@genero">@genero.Nome</MudSelectItem>
+                }
+            }
+        </MudSelect>
+
+        @if (GenerosSelecionados is not null && GenerosSelecionados.Any())
+        {
+            <MudAlert Severity="Severity.Info" Class="mt-2">
+                Gêneros selecionados: @string.Join(", ", GenerosSelecionados.Select(g => g.Nome))
+            </MudAlert>
+        }
+
+        <div class="d-flex align-center justify-space-between mt-4">
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       OnClick="Cadastrar"
+                       Disabled="@(!form.IsValid)">
+                Cadastrar
+            </MudButton>
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Info"
+                       OnClick="Voltar">
+                Voltar
+            </MudButton>
+        </div>
+    </MudForm>
+
+</MudPaper>
 
 @code {
+    private int anoLancamento;
+    private string? nome;
 
+    private ICollection<ArtistaResponse>? artistas;
+    private ICollection<GeneroResponse>? generos;
+
+    private List<GeneroResponse>? GenerosSelecionados { get; set; } = new();
+    private ArtistaResponse? ArtistaDaMusica { get; set; }
+
+    private List<GeneroRequest?>? GenerosRequest { get; set; } = new();
+    private MudForm form;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            artistas = await artistasAPI.GetArtistasAsync();
+            generos = await generoAPI.GetGenerosAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao carregar dados: {ex.Message}");
+        }
+    }
+
+    private void GeneroSelecionado(GeneroResponse genero)
+    {
+        if (!GenerosSelecionados!.Contains(genero))
+        {
+            GenerosSelecionados.Add(genero);
+        }
+    }
+
+    public async Task Cadastrar()
+    {
+        try
+        {
+            if (GenerosSelecionados is not null)
+            {
+                foreach (var genero in GenerosSelecionados)
+                {
+                    GenerosRequest!.Add(new GeneroRequest(genero.Nome!, genero.Descricao!));
+                }
+            }
+
+            var musicaRequest = new MusicaRequest(nome!, ArtistaDaMusica!.Id, anoLancamento, GenerosRequest!);
+            await musicaAPI.AddMusicaAsync(musicaRequest);
+            navigationManager.NavigateTo("/MusicasPorArtista");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao cadastrar música: {ex.Message}");
+        }
+    }
+
+    private void Voltar()
+    {
+        navigationManager.NavigateTo("/Artistas");
+    }
 }
