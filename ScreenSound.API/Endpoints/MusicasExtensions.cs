@@ -39,7 +39,7 @@ public static class MusicasExtensions
             {
                 ArtistaId = musicaRequest.ArtistaId,
                 AnoLancamento = musicaRequest.anoLancamento,
-                Generos = musicaRequest.generos is not null ? GeneroRequestConverter(musicaRequest.generos, dalGenero) : new List<Genero>()
+                Generos = musicaRequest.generos is not null ? GeneroRequestConverter(musicaRequest!.generos!, dalGenero) : new List<Genero>()
             };
 
             dalMusica.Adicionar(musica);
@@ -75,14 +75,14 @@ public static class MusicasExtensions
         });
     }
 
-    private static ICollection<Genero> GeneroRequestConverter(ICollection<GeneroRequest> generos, DAL<Genero> dalGenero)
+    private static ICollection<Genero> GeneroRequestConverter(ICollection<GeneroRequest?>? generos, DAL<Genero> dalGenero)
     {
         var listaGeneros = new List<Genero>();
 
-        foreach(var item in generos)
+        foreach(var item in generos!)
         {
-            var generoEntity = RequestToEntity(item);
-            var genero = dalGenero.FindBy(g => g.Nome.ToUpper().Equals(item.nome.ToUpper()));
+            var generoEntity = RequestToEntity(item!);
+            var genero = dalGenero.FindBy(g => g!.Nome!.ToUpper().Equals(item!.nome.ToUpper()));
             if (genero is not null)
             {
                 listaGeneros.Add(genero);
