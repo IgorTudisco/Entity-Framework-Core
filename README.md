@@ -16,3 +16,10 @@
 - <h3> .NET: criando uma API Web com ASP.NET Core <a href="https://cursos.alura.com.br/course/dotnet-criando-api-web-asp-net-core">Link do curso</a></h3>
 
 <p> Certificado <a href="https://cursos.alura.com.br/certificate/igortudisco/dotnet-criando-api-web-asp-net-core">Link</a> </p>
+
+<br>
+<br>
+
+- <h3> .NET: desenvolvendo uma aplicação web com ASP.NET Core Blazor <a href="https://cursos.alura.com.br/course/dotnet-aplicacao-web-asp-net-core-blazor">Link do curso</a></h3>
+
+<p> Certificado <a href="https://cursos.alura.com.br/certificate/igortudisco/dotnet-aplicacao-web-asp-net-core-blazor">Link</a> </p>
