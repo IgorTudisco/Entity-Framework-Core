@@ -1,5 +1,6 @@
 ﻿@page "/EditarMusica/{NomeMusica}"
 
+
 @inject ArtistasAPI artistasAPI
 @inject GeneroAPI generoAPI
 @inject MusicasAPI musicaAPI
@@ -12,34 +13,34 @@
     <MudForm>
 
         <MudTextField Class="mt-4" T="string" Placeholder="Nome da música/canção"
-                      @bind-Value="nome"
-                      Variant="Variant.Outlined"
-                      Required="true"
-                      RequiredError="Campo obrigatório." />
+        @bind-Value="nome"
+        Variant="Variant.Outlined"
+        Required="true"
+        RequiredError="Campo obrigatório." />
 
         <MudSelect Class="mt-4" T="ArtistaResponse" Label="Artistas" Variant="Variant.Outlined" ValueChanged="ArtistaSelecionado" AnchorOrigin="Origin.BottomCenter">
             @if (artistas is not null)
             {
                 @foreach (var artista in artistas)
                 {
-                    <MudSelectItem Value="artista" />
+                    <MudSelectItem Value="artista">@artista.Nome</MudSelectItem>
                 }
             }
         </MudSelect>
 
         <MudNumericField Class="mt-4" Placeholder="Ano de lançamento"
-                         @bind-Value="anoLancamento"
-                         Variant="Variant.Outlined"
-                         Lines="1"
-                         Required="true"
-                         RequiredError="Campo obrigatório." />
+        @bind-Value="anoLancamento"
+        Variant="Variant.Outlined"
+        Lines="1"
+        Required="true"
+        RequiredError="Campo obrigatório." />
 
-        <MudSelect Class="mt-4" T="GeneroResponse" Label="Gêneros" Variant="Variant.Outlined" ValueChanged="GeneroSelecionado" AnchorOrigin="Origin.BottomCenter">
+        <MudSelect Class="mt-4" T="GeneroResponse" Label="Gêneros" Variant="Variant.Outlined"ValueChanged="GeneroSelecionado" AnchorOrigin="Origin.BottomCenter">
             @if (generos is not null)
             {
-                @foreach (var generos in generos)
+                @foreach (var genero in generos)
                 {
-                    <MudSelectItem Value="generos" />
+                    <MudSelectItem Value="genero">@genero.Nome</MudSelectItem>
                 }
             }
             @if (GenerosSelecionados is not null)
@@ -51,18 +52,31 @@
             }
         </MudSelect>
 
-        <div class="d-flex align-center justify-space-between mt-4">
+        <div class="d-flex justify-space-between mt-4">
+
             <MudButton Variant="Variant.Filled"
-                       Color="Color.Primary"
-                       @onclick="Deletar"
-                       Class="ml-auto">
-                Deletar
-            </MudButton>
-            <MudButton Variant="Variant.Filled"
-                       Color="Color.Info"
-                       Class="ml-3">
+            OnClick="Voltar"
+            Color="Color.Secondary"
+            Class="w-100">
                 Voltar
             </MudButton>
+
+            <div>
+                <MudButton Variant="Variant.Filled"
+                OnClick="Edit"
+                Color="Color.Secondary"
+                Class="w-100">
+                    Editar
+                </MudButton>
+
+                <MudButton Variant="Variant.Filled"
+                OnClick="Deletar"
+                Color="Color.Secondary"
+                Class="w-100 ms-lg-3">
+                    Deletar
+                </MudButton>
+            </div>
+
         </div>
 
     </MudForm>
@@ -72,6 +86,8 @@
 @code {
     private int? anoLancamento;
     private string? nome;
+    private ArtistaResponse? artista;
+    private GeneroResponse? genero;
 
     private ICollection<ArtistaResponse>? artistas;
     private ICollection<GeneroResponse>? generos;
@@ -80,6 +96,7 @@
     private ArtistaResponse? ArtistaDaMusica { get; set; }
 
     public MusicaResponse? Musica { get; set; }
+    public MusicaRequestEdit? MusicaEdit { get; set; }
 
     [Parameter]
     public string? NomeMusica { get; set; }
@@ -90,11 +107,15 @@
         anoLancamento = Musica!.anoLancamento;
         nome = Musica!.Nome;
         ArtistaDaMusica = new ArtistaResponse(Musica.ArtistaId, Musica.NomeArtista, "", "");
+
+        artistas = await artistasAPI.GetArtistasAsync();
+        generos = await generoAPI.GetGenerosAsync();
     }
 
     private void ArtistaSelecionado(ArtistaResponse artista)
     {
         ArtistaDaMusica = artista;
+        this.artista = artista;
     }
 
     private void GeneroSelecionado(GeneroResponse genero)
@@ -104,8 +125,16 @@
             if (!GenerosSelecionados.Contains(genero))
             {
                 GenerosSelecionados.Add(genero);
+                this.genero = genero;
             }
         }
+    }
+
+    private async Task Edit()
+    {
+        MusicaEdit = new MusicaRequestEdit(Musica!.Id, nome!, artista!.Id, anoLancamento!);
+        await musicaAPI.EditMusicaAsync(MusicaEdit!);
+        navigationManager.NavigateTo("/MusicasPorArtista");
     }
 
     public async Task Deletar()
@@ -113,5 +142,10 @@
         await musicaAPI.DeleteMusicaAsync(Musica!.Id);
         navigationManager.NavigateTo("/MusicasPorArtista");
 
+    }
+
+    private void Voltar()
+    {
+        navigationManager.NavigateTo("/MusicasPorArtista");
     }
 }
