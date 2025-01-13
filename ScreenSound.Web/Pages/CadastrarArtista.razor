@@ -35,22 +35,19 @@
             </ButtonTemplate>
         </MudFileUpload>
 
-        <div class="d-flex justify-space-between mt-4">
-
+        <div class="d-flex align-center justify-space-between mt-4">
             <MudButton Variant="Variant.Filled"
-            OnClick="Voltar"
-            Color="Color.Primary"
-            Class="w-100">
-                Voltar
-            </MudButton>
-
-            <MudButton Variant="Variant.Filled"
-            OnClick="Cadastrar"
-            Color="Color.Primary"
-            Class="w-100">
+                       Color="Color.Primary"
+                       @onclick="Cadastrar"
+                       Class="ml-auto">
                 Cadastrar
             </MudButton>
-
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Info"
+                       @onclick="Voltar"
+                       Class="ml-3">
+                Voltar
+            </MudButton>
         </div>
 
     </MudForm>

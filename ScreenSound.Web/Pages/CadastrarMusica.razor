@@ -1,7 +1,7 @@
 ﻿@page "/CadastrarMusica"
 
 @inject ArtistasAPI artistasAPI
-@* @inject GeneroAPI generoAPI *@
+@inject GeneroAPI generoAPI
 @inject MusicasAPI musicaAPI 
 @inject NavigationManager navigationManager
 
@@ -83,7 +83,7 @@
     protected override async Task OnInitializedAsync()
     {
         artistas = await artistasAPI.GetArtistasAsync();
-        // generos = await generoAPI.GetGenerosAsync();
+        generos = await generoAPI.GetGenerosAsync();
 
         Console.WriteLine("Artistas: " + artistas);
         Console.WriteLine("Generos: " + generos);
