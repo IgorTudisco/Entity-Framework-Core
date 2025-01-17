@@ -1,12 +1,22 @@
 ﻿
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using ScreenSound.Modelos;
+using ScreenSound.Shared.Dados.Modelos;
 using ScreenSound.Shared.Models.Models;
 
 namespace ScreenSound.Data;
 
-public class ScreenSoundContext : DbContext
+/*
+ 
+ * Agora as minhas classes PessoaComAcesso e PerfilDeAcesso que estão herdando de IdentityUser<int> e IdentityRole<int> respectivamente.
+ * São responsáveis por representar as entidades de usuário e perfil de acesso no banco de dados e são utilizadas para a autenticação, além
+ * de ter a responsabilidade de gerenciar as permissões e acessos dos usuários no sistema para modelar as classes de Artistas, Músicas e Gêneros.
+ 
+ */
+
+public class ScreenSoundContext : IdentityDbContext<PessoaComAcesso, PerfilDeAcesso, int>
 {
 
     public DbSet<Artista> Artistas { get; set; }
@@ -101,4 +111,34 @@ public class ScreenSoundContext : DbContext
  * Para conhecer mais sobre o funcionamento do Proxies você pode acessar
  * a documentação oficial. (https://learn.microsoft.com/en-us/ef/core/querying/related-data/lazy)
  
+ */
+
+/*
+  
+ * A documentação sobre tópicos de segurança relacionados ao ASP.NET Core (https://learn.microsoft.com/en-us/aspnet/core/security/?view=aspnetcore-8.0),
+ * relacionados ao framework web da Microsoft. Um dos tópicos presentes na documentação é esse que estamos usando,Authentication vs. Authorization
+ * (https://learn.microsoft.com/en-us/aspnet/core/security/?view=aspnetcore-8.0#authentication-vs-authorization autenticação e autorização).
+ 
+ * Vamos usar a solução Identity que está dentro de "Authentication". Mas, tem outras soluções disponíveis.
+ 
+ * Autenticação e Autorização, é somente a ponta de um iceberg bem mais profundo chamado Segurança. A própria Microsoft busca levantar o tema em sua
+ * página sobre segurança no ASP.NET Core (https://learn.microsoft.com/pt-br/aspnet/core/security/?view=aspnetcore-9.0). Nela, cita também outros
+ * assuntos que você, como pessoa desenvolvedora, precisará estudar em outros momentos de sua carreira, tais como principais vulnerabilidades,
+ * proteção de dados críticos, HTTPS e CORS.
+ 
+ * Autenticação e Autorização são processos complementares para identificar e permitir o acesso da pessoa a recursos e informações
+ * do sistema sendoprotegido. Uma solução de Gestão de Identidade e Acesso (IAM - Identity and Access Management)
+ * deve fornecer estratégias para implantar estes dois processos. Leia mais sobre gestão de identidade e acesso neste artigo da
+ * Microsoft (https://learn.microsoft.com/pt-br/azure/active-directory/fundamentals/introduction-identity-access-management).
+ 
+ * Uma das soluções mais simples é a biblioteca ASP.NET Core Identity, que estamos usando, isso segundo sua
+ * documentação (https://learn.microsoft.com/pt-br/aspnet/core/security/authentication/identity?view=aspnetcore-9.0&tabs=visual-studio).
+ 
+ * ASP.NET Core Identity:
+ 
+ * É uma API que suporta a funcionalidade de logon da interface do usuário (UI);
+ 
+ * Gerencia usuários, senhas, dados de perfil, funções, declarações, tokens, confirmação por e-mail e muito mais.
+ 
+  
  */
