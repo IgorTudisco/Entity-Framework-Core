@@ -10,9 +10,16 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddMudServices();
 
-builder.Services.AddTransient<ArtistasAPI>();
-builder.Services.AddTransient<MusicasAPI>();
-builder.Services.AddTransient<GeneroAPI>();
+/*
+ 
+ * Foi alterado o tipo de injeção de transient para scoped. O motivo é conseguir reaproveitar os objetos do mesmo tipo em diferentes páginas
+ * e componentes, dentro da mesma requisição. Esse tipo de ciclo de vida dos objetos injetados (scoped) será fundamental para a autenticação.
+ 
+ */
+
+builder.Services.AddScoped<ArtistasAPI>();
+builder.Services.AddScoped<MusicasAPI>();
+builder.Services.AddScoped<GeneroAPI>();
 
 builder.Services.AddHttpClient("API", client =>
 {

@@ -7,20 +7,45 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.ConfigureAppConfiguration(config =>
-{
-    var settings = config.Build();
-config.AddAzureAppConfiguration("Endpoint=https://screensound-congiguration.azconfig.io;Id=cXz/;Secret=BJNde2oveaWFGRhzgMTJkVFIUck7ypOw2PU6kHQJ0EO8ygbtI6oBJQQJ99BAACZoyfiyStiwAAACAZAC2br6");
-});
+// Está sendo rodado localmente e a chave Secret não existe mais.
 
-builder.Services.AddCors();
+//builder.Host.ConfigureAppConfiguration(config =>
+//{
+//    var settings = config.Build();
+//config.AddAzureAppConfiguration("Endpoint=https://screensound-congiguration.azconfig.io;Id=cXz/;Secret=BJNde2oveaWFGRhzgMTJkVFIUck7ypOw2PU6kHQJ0EO8ygbtI6oBJQQJ99BAACZoyfiyStiwAAACAZAC2br6");
+//});
+
+
+/*
+ 
+ * Foi aumentada a restrição de acesso entre a aplicação Web e a API através da configuração CORS,
+ * nomeada abaixo como wasm. Antes era permitido qualquer acesso, enquanto o código abaixo
+ * somente permite origens apontadas pelas URLs dos dois projetos.
+ 
+ */
+
+builder.Services.AddCors(
+    options => options.AddPolicy(
+
+        "wasm",
+
+        policy => policy.WithOrigins(
+
+            [builder.Configuration["BackendUrl"] ?? "https://localhost:7122/",
+            builder.Configuration["FrontendUrl"] ?? "https://localhost:7199/"]
+
+        ).AllowAnyMethod()
+         .SetIsOriginAllowed(pol => true)
+         .AllowAnyHeader()
+         .AllowCredentials()
+    )
+);
+
 
 builder.Services.AddDbContext<ScreenSoundContext>((options) =>
 {
     options.UseSqlServer(builder.Configuration["ConnectionStrings:ScreenSoundDB"]).UseLazyLoadingProxies(false);
 });
-
-//builder.Services.AddDbContext<ScreenSoundContext>();
 
 builder.Services.AddTransient<DAL<Artista>>();
 builder.Services.AddTransient<DAL<Musica>>();
@@ -32,6 +57,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options => options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 var app = builder.Build();
+
+app.UseCors("wasm");
 
 app.AddEndPointArtistas();
 app.AddEndPointMusicas();

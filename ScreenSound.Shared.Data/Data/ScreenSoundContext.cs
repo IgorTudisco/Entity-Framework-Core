@@ -27,16 +27,19 @@ public class ScreenSoundContext : DbContext
         optionsBuilder.UseSqlServer(ConnectionString).UseLazyLoadingProxies(false);
     }
 
+    /*
+     
+     * Foi incluída a linha de código base.OnModelCreating(modelBuilder), com o objetivo de permitir que códigos escritos em classes
+     * ancestrais continuem sendo executados. Essa alteração foi feita para permitir o uso de uma outra biblioteca da Microsoft.
+     
+     */
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Musica>()
-            .HasOne(m => m.Artista)
-            .WithMany(a => a.Musicas)
-            .HasForeignKey(m => m.ArtistaId);
-
-        modelBuilder.Entity<Musica>()
-            .HasMany(m => m.Generos)
-            .WithMany(g => g.Musica);
+            .HasMany(c => c.Generos)
+            .WithMany(c => c.Musica!);
     }
 
 }
