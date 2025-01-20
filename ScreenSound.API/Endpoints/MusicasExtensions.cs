@@ -12,13 +12,15 @@ public static class MusicasExtensions
 
     public static void AddEndPointArtistas(this WebApplication app)
     {
-        app.MapGet("/Musicas", ([FromServices] DAL<Musica> dal) =>
+        var groupBuilder = app.MapGroup("musica").RequireAuthorization().WithTags("Musica");
+
+        groupBuilder.MapGet("", ([FromServices] DAL<Musica> dal) =>
         {
             var listMusicas = EntityListToResponseList(dal.Listar(includes: m => m.Artista));
             return Results.Ok(listMusicas);
         });
 
-        app.MapGet("/Musicas/{nome}", ([FromServices] DAL<Musica> dal, string nome) =>
+        groupBuilder.MapGet("{nome}", ([FromServices] DAL<Musica> dal, string nome) =>
         {
             var musica = dal.FindBy(m => m.Nome.ToUpper().Equals(nome.ToUpper()), m => m.Artista).FirstOrDefault();
             if (musica is null)
@@ -33,7 +35,7 @@ public static class MusicasExtensions
             return Results.Ok(responseMusica);
         });
 
-        app.MapPost("/Musicas", ([FromServices] DAL<Musica> dalMusica, [FromServices] DAL <Genero> dalGenero,[FromBody] MusicaRequest musicaRequest) =>
+        groupBuilder.MapPost("", ([FromServices] DAL<Musica> dalMusica, [FromServices] DAL <Genero> dalGenero,[FromBody] MusicaRequest musicaRequest) =>
         {
             var musica = new Musica(musicaRequest.nome)
             {
@@ -46,7 +48,7 @@ public static class MusicasExtensions
             return Results.Ok();
         });
 
-        app.MapDelete("/Musicas/{id}", ([FromServices] DAL<Musica> dal, int id) =>
+        groupBuilder.MapDelete("{id}", ([FromServices] DAL<Musica> dal, int id) =>
         {
             var musica = dal.FindBy(a => a.Id == id);
             if (musica is null) return Results.NotFound();
@@ -56,7 +58,7 @@ public static class MusicasExtensions
 
         });
 
-        app.MapPut("/Musicas", ([FromServices] DAL<Musica> dalMusica, [FromServices] DAL<Artista> dalArtista, [FromBody] MusicaRequestEdit musicaRequestEdit) =>
+        groupBuilder.MapPut("", ([FromServices] DAL<Musica> dalMusica, [FromServices] DAL<Artista> dalArtista, [FromBody] MusicaRequestEdit musicaRequestEdit) =>
         {
             var musicaAtualizar = dalMusica.FindBy(m => m.Id == musicaRequestEdit.Id);
             if (musicaAtualizar is null) return Results.NotFound();

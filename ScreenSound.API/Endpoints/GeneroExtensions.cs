@@ -11,15 +11,17 @@ public static class GeneroExtensions
 {
     public static void AddEndPointGenero(this WebApplication app)
     {
-        app.MapGet("/Generos", ([FromServices] DAL<Genero> dal) =>
+        var groupBuilder = app.MapGroup("genero").RequireAuthorization().WithTags("Genero");
+
+        groupBuilder.MapGet("", ([FromServices] DAL<Genero> dal) =>
         {
             var listGenero = EntityListToResponseList(dal.Listar());
             return Results.Ok(listGenero);
         });
 
-        app.MapGet("/Generos/{nome}", ([FromServices] DAL<Genero> dal, string nome) =>
+        groupBuilder.MapGet("{nome}", ([FromServices] DAL<Genero> dal, string nome) =>
         {
-            var genero = dal.FindBy(g => g.Nome.ToUpper().Equals(nome.ToUpper()));
+            var genero = dal.FindBy(g => g.Nome!.ToUpper().Equals(nome.ToUpper()));
             if (genero is null)
             {
                 return Results.NotFound("Gênero não encontrado.");
@@ -28,14 +30,14 @@ public static class GeneroExtensions
             return Results.Ok(responseGenero);
         });
 
-        app.MapPost("/Generos", ([FromServices] DAL<Genero> dal, [FromBody] GeneroRequest generoRequest) =>
+        groupBuilder.MapPost("", ([FromServices] DAL<Genero> dal, [FromBody] GeneroRequest generoRequest) =>
         {
             var genero = RequestToEntity(generoRequest);
             dal.Adicionar(genero);
             return Results.Ok(genero);
         });
 
-        app.MapDelete("/Generos/{id}", ([FromServices] DAL<Genero> dal, int id) =>
+        groupBuilder.MapDelete("{id}", ([FromServices] DAL<Genero> dal, int id) =>
         {
             var genero = dal.FindBy(g => g.Id == id);
             if (genero is null) return Results.NotFound("Gênero para exclusão não encontrado.");
@@ -45,7 +47,7 @@ public static class GeneroExtensions
 
         });
 
-        app.MapPut("/Generos", ([FromServices] DAL<Genero> dal, [FromBody] GeneroRequestEdit generoRequestEdit) =>
+        groupBuilder.MapPut("/Generos", ([FromServices] DAL<Genero> dal, [FromBody] GeneroRequestEdit generoRequestEdit) =>
         {
             var generoAtualizar = dal.FindBy(g => g.Id == generoRequestEdit.Id);
 

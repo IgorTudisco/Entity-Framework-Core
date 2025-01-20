@@ -50,6 +50,8 @@ builder.Services.AddDbContext<ScreenSoundContext>((options) =>
 
 builder.Services.AddIdentityApiEndpoints<PessoaComAcesso>().AddEntityFrameworkStores<ScreenSoundContext>();
 
+builder.Services.AddAuthorization();
+
 builder.Services.AddTransient<DAL<Artista>>();
 builder.Services.AddTransient<DAL<Musica>>();
 builder.Services.AddTransient<DAL<Genero>>();
@@ -61,13 +63,15 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 
 var app = builder.Build();
 
+app.UseAuthentication();
+
 app.UseCors("wasm");
 
 app.AddEndPointArtistas();
 app.AddEndPointMusicas();
 app.AddEndPointGenero();
 
-app.MapGroup("auth").MapIdentityApi<PessoaComAcesso>().WithTags("Autorizar");
+app.MapGroup("auth").MapIdentityApi<PessoaComAcesso>().WithTags("Autorização");
 
 app.UseSwagger();
 app.UseSwaggerUI();

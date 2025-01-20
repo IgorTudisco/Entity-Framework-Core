@@ -10,13 +10,17 @@ public static class ArtistasExtensions
 {
     public static void AddEndPointMusicas(this WebApplication app)
     {
-        app.MapGet("/Artistas", ([FromServices] DAL<Artista> dal) =>
+        // Cria um grupo de endpoints para a rota /Artistas
+        var groupBuilder = app.MapGroup("artistas").RequireAuthorization().WithTags("Artistas");
+
+        // Adiciona um endpoint para a rota /artistas e não é necessário passar o nome do artista. Se não ficaria /artistas/Artistas, mas só queremos /artistas.
+        groupBuilder.MapGet("", ([FromServices] DAL<Artista> dal) =>
         {
             var listArtista = EntityListToResponseList(dal.Listar());
             return Results.Ok(listArtista);
         });
 
-        app.MapGet("/Artistas/{nome}", ([FromServices] DAL<Artista> dal, string nome) =>
+        groupBuilder.MapGet("/{nome}", ([FromServices] DAL<Artista> dal, string nome) =>
         {
             var artista = dal.FindBy(a => a.Nome.ToUpper().Equals(nome.ToUpper()));
             if (artista is null)
@@ -27,7 +31,7 @@ public static class ArtistasExtensions
             return Results.Ok(responseArtista);
         });
 
-        app.MapPost("/Artistas", async ([FromServices]IHostEnvironment env, [FromServices] DAL<Artista> dal, [FromBody] ArtistaRequest artistaRequest) =>
+        groupBuilder.MapPost("", async ([FromServices]IHostEnvironment env, [FromServices] DAL<Artista> dal, [FromBody] ArtistaRequest artistaRequest) =>
         {
             var nome = artistaRequest.nome.Trim();
             var imagemArtista = DateTime.Now.ToString("ddMMyyyyhhss") + "." + nome + ".jpeg";
@@ -47,7 +51,7 @@ public static class ArtistasExtensions
             return Results.Ok(artista);
         });
 
-        app.MapDelete("/Artistas/{id}", ([FromServices] DAL<Artista> dal, int id) =>
+        groupBuilder.MapDelete("{id}", ([FromServices] DAL<Artista> dal, int id) =>
         {
             var artista = dal.FindBy(a => a.Id == id);
             if (artista is null) return Results.NotFound();
@@ -57,7 +61,7 @@ public static class ArtistasExtensions
 
         });
 
-        app.MapPut("/Artistas", ([FromServices] DAL<Artista> dal, [FromBody] ArtistaRequestEdit artistaRequestEdit) =>
+        groupBuilder.MapPut("", ([FromServices] DAL<Artista> dal, [FromBody] ArtistaRequestEdit artistaRequestEdit) =>
         {
             var artistaAtualizar = dal.FindBy(a => a.Id == artistaRequestEdit.Id);
 
