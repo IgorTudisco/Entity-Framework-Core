@@ -64,6 +64,7 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 var app = builder.Build();
 
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseCors("wasm");
 
