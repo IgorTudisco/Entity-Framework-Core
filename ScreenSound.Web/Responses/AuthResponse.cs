@@ -1,0 +1,10 @@
+﻿using System.Net.Http.Json;
+
+namespace ScreenSound.Web.Responses;
+
+public class AuthResponse
+{
+    public bool Sucesso { get; set; }
+    public string[]? Erros { get; set; }
+
+}

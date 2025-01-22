@@ -20,6 +20,7 @@ builder.Services.AddMudServices();
 builder.Services.AddScoped<ArtistasAPI>();
 builder.Services.AddScoped<MusicasAPI>();
 builder.Services.AddScoped<GeneroAPI>();
+builder.Services.AddScoped<AuthAPI>();
 
 builder.Services.AddHttpClient("API", client =>
 {
