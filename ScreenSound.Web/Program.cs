@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
@@ -10,6 +11,13 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddMudServices();
 
+// Injetando a minha autenticação e passando o escopo por onde minha aplicação será autenticada
+builder.Services.AddAuthorizationCore();
+builder.Services.AddScoped<AuthenticationStateProvider, AuthAPI>();
+
+// inserindo o provider autenticado no meu escopo
+builder.Services.AddScoped<AuthAPI>(sp => (AuthAPI) sp.GetRequiredService<AuthenticationStateProvider>());
+
 /*
  
  * Foi alterado o tipo de injeção de transient para scoped. O motivo é conseguir reaproveitar os objetos do mesmo tipo em diferentes páginas
@@ -20,7 +28,6 @@ builder.Services.AddMudServices();
 builder.Services.AddScoped<ArtistasAPI>();
 builder.Services.AddScoped<MusicasAPI>();
 builder.Services.AddScoped<GeneroAPI>();
-builder.Services.AddScoped<AuthAPI>();
 builder.Services.AddScoped<CookieHandler>();
 
 builder.Services.AddHttpClient("API", client =>
@@ -61,5 +68,32 @@ await builder.Build().RunAsync();
  * Por simplificar muito o desenvolvimento de interfaces Web Blazor, esta foi a opção para este curso, mas lembre-se que existem outras bibliotecas
  * disponíveis também com a mesma finalidade. Para saber mais sobre a biblioteca, recomendamos o acesso ao link da Documentação MudBlazor
  * (https://mudblazor.com/docs/overview).
+ 
+ */
+
+/*
+ 
+ * No ASP.NET existem os métodos de extensão AddScoped, AddTransient e AddSingleton que fazem parte do sistema
+ * de injeção de dependência no ASP.NET Core. Eles são usados para registrar serviços no contêiner de injeção
+ * de dependência nativo do framework, e são responsáveis por controlar o ciclo de vida das instâncias desses serviços.
+ 
+ * AddScoped
+ * No método AddScoped registramos um serviço com um tempo de vida por escopo. Isso significa dizer que uma instância do
+ * serviço será criada e mantida durante todo o ciclo de vida de uma única requisição HTTP (ou escopo) e para cada nova requisição
+ * recebe sua própria instância do serviço.
+ 
+ * AddTransient
+ 
+ * Já no método AddTransient o serviço é registrado com um tempo de vida transitório, ou seja, uma nova instância do serviço será
+ * criada toda vez que ele for solicitado. Isso pode acontecer várias vezes durante a mesma requisição ou em diferentes requisições.
+ 
+ * AddSingleton
+ 
+ * Para o método AddSingleton o serviço é registrado com um tempo de vida único em toda a aplicação. Apenas uma instância do serviço
+ * será criada e compartilhada por todas as requisições e threads durante a execução do aplicativo.
+ 
+ * Documentação oficial - Injeção de dependência no ASP.NET Core https://learn.microsoft.com/pt-br/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-9.0
+ 
+ * Documentação oficial - Injeção de dependência do .NET https://learn.microsoft.com/pt-br/dotnet/core/extensions/dependency-injection
  
  */
