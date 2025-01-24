@@ -8,7 +8,7 @@
     <AuthorizeView>
 
         <Authorized>
-            <p>Você está conectado como @context.User.Identity!.Name</p>
+            <p>Você está conectado como @context.User.Identity!.Name </p>
         </Authorized>
 
         <NotAuthorized>
@@ -34,25 +34,27 @@
         </NotAuthorized>
 
     </AuthorizeView>
+
     <MudForm>
 
-                <MudTextField T="string" Label="Email" @bind-Value="email"
-                              Variant="Variant.Outlined" Class="my-4"
-                              Required="true" RequiredError="Email obrigatório!"
-                              OnlyValidateIfDirty="true" />
+        <MudTextField T="string" Label="Email" @bind-Value="email"
+                      Variant="Variant.Outlined" Class="my-4"
+                      Required="true" RequiredError="Email obrigatório!"
+                      OnlyValidateIfDirty="true" />
 
-                <MudTextField T="string" Label="Senha" @bind-Value="senha"
-                              InputType="InputType.Password"
-                              Variant="Variant.Outlined" Class="my-4"
-                              Required="true" RequiredError="Senha obrigatória!"
-                              OnlyValidateIfDirty="true" />
+        <MudTextField T="string" Label="Senha" @bind-Value="senha"
+                      InputType="InputType.Password"
+                      Variant="Variant.Outlined" Class="my-4"
+                      Required="true" RequiredError="Senha obrigatória!"
+                      OnlyValidateIfDirty="true" />
 
-                <MudButton Variant="Variant.Filled" Color="Color.Primary"
-                           Class="my-6" @onclick="FazerLogin">
-                    Login
-                </MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary"
+                   Class="my-6" @onclick="FazerLogin">
+            Login
+        </MudButton>
 
-            </MudForm>
+    </MudForm>
+
 </MudPaper>
 
 @code {

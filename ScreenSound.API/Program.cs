@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ScreenSound.API.Endpoints;
 using ScreenSound.Data;
@@ -73,6 +75,13 @@ app.AddEndPointMusicas();
 app.AddEndPointGenero();
 
 app.MapGroup("auth").MapIdentityApi<PessoaComAcesso>().WithTags("Autorização");
+
+app.MapPost("auth/logout", async([FromServices] SignInManager<PessoaComAcesso> singInManager) =>
+{
+    await singInManager.SignOutAsync();
+    return Results.Ok();
+
+}).RequireAuthorization().WithTags("Autorização");
 
 app.UseSwagger();
 app.UseSwaggerUI();
