@@ -2,6 +2,9 @@
 @using Microsoft.AspNetCore.Components.Authorization
 
 @inject AuthAPI AuthAPI
+@inject NavigationManager Navigation
+
+@attribute [AllowAnonymous]
 
 <MudPaper Class="px-8 pt-2 pb-4 mx-16 my-8" Justify="Justify.Center">
 
@@ -33,27 +36,7 @@
             </MudForm>
         </NotAuthorized>
 
-    </AuthorizeView>
-
-    <MudForm>
-
-        <MudTextField T="string" Label="Email" @bind-Value="email"
-                      Variant="Variant.Outlined" Class="my-4"
-                      Required="true" RequiredError="Email obrigatório!"
-                      OnlyValidateIfDirty="true" />
-
-        <MudTextField T="string" Label="Senha" @bind-Value="senha"
-                      InputType="InputType.Password"
-                      Variant="Variant.Outlined" Class="my-4"
-                      Required="true" RequiredError="Senha obrigatória!"
-                      OnlyValidateIfDirty="true" />
-
-        <MudButton Variant="Variant.Filled" Color="Color.Primary"
-                   Class="my-6" @onclick="FazerLogin">
-            Login
-        </MudButton>
-
-    </MudForm>
+    </AuthorizeView>    
 
 </MudPaper>
 
@@ -61,9 +44,17 @@
     private string? email;
     private string? senha;
 
+    [SupplyParameterFromQuery]
+    public string? ReturnUrl { get; set; }
+
     private async Task FazerLogin()
     {
-        await AuthAPI.LoginAsync(email!, senha!);
+        var resposta = await AuthAPI.LoginAsync(email!, senha!);
+        if (resposta.Sucesso)
+        {
+            if (ReturnUrl is not null)
+                Navigation.NavigateTo(ReturnUrl);
+        }
     }
 
 }
