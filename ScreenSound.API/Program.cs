@@ -27,23 +27,20 @@ var builder = WebApplication.CreateBuilder(args);
  
  */
 
-builder.Services.AddCors(
-    options => options.AddPolicy(
-
-        "wasm",
-
-        policy => policy.WithOrigins(
-
-            [builder.Configuration["BackendUrl"] ?? "https://localhost:7122/",
-            builder.Configuration["FrontendUrl"] ?? "https://localhost:7199/"]
-
+builder.Services.AddCors( options =>
+    options.AddPolicy("wasm", policy =>
+    
+        policy.WithOrigins(
+            [
+                builder.Configuration["BackendUrl"] ?? "https://localhost:7122/",
+                builder.Configuration["FrontendUrl"] ?? "https://localhost:7199/"
+            ]
         ).AllowAnyMethod()
          .SetIsOriginAllowed(pol => true)
          .AllowAnyHeader()
          .AllowCredentials()
     )
 );
-
 
 builder.Services.AddDbContext<ScreenSoundContext>((options) =>
 {
@@ -65,10 +62,12 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 
 var app = builder.Build();
 
+app.UseCors("wasm");
+
+app.UseStaticFiles();
+
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseCors("wasm");
 
 app.AddEndPointArtistas();
 app.AddEndPointMusicas();
@@ -92,7 +91,7 @@ app.UseCors(x => x.AllowAnyMethod()
                 .AllowCredentials()
 );
 
-app.UseStaticFiles();
+
 
 app.Run();
 
