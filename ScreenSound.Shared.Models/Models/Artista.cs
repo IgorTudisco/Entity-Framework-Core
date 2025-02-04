@@ -1,13 +1,15 @@
-﻿namespace ScreenSound.Modelos; 
+﻿using ScreenSound.Shared.Models.Models;
+
+namespace ScreenSound.Modelos; 
 
 public class Artista 
 {
-
     public string Nome { get; set; }
     public string FotoPerfil { get; set; }
     public string Bio { get; set; }
     public int Id { get; set; }
     public virtual ICollection<Musica> Musicas { get; set; } = new List<Musica>();
+    public virtual ICollection<AvaliacaoArtista> Avaliacoes { get; set; } = new List<AvaliacaoArtista>();
 
     public Artista(string nome, string bio)
     {
@@ -19,6 +21,12 @@ public class Artista
     public void AdicionarMusica(Musica musica)
     {
         Musicas.Add(musica);
+    }
+
+    public void AdicionarNota(int pessoaId, int nota)
+    {
+        nota = Math.Clamp(nota, 1, 5); // Garante que a nota esteja entre 1 e 5
+        Avaliacoes.Add(new AvaliacaoArtista() { ArtistaId = this.Id, PessoaId = pessoaId, Nota = nota });
     }
 
     public void ExibirDiscografia()
@@ -45,3 +53,9 @@ public class Artista
             Bio: {Bio}";
     }
 }
+
+
+/*
+ * Classe Math e seus métodos, incluindo Min(), Max() e Clamp(); https://learn.microsoft.com/en-us/dotnet/api/system.math?view=net-9.0  
+ * Operadores condicionais ternários. https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/conditional-operator
+ */

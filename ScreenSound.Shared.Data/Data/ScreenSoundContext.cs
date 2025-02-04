@@ -22,6 +22,7 @@ public class ScreenSoundContext : IdentityDbContext<PessoaComAcesso, PerfilDeAce
     public DbSet<Artista> Artistas { get; set; }
     public DbSet<Musica> Musicas { get; set; }
     public DbSet<Genero> Generos { get; set; }
+    public DbSet<AvaliacaoArtista> AvaliacaoArtistas { get; set; }
 
     private string ConnectionString = "Data Source=IGOR-TUDISCO\\IGORTUDISCO;Initial Catalog=ScreenSoundV0;Integrated Security=True;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
@@ -50,6 +51,10 @@ public class ScreenSoundContext : IdentityDbContext<PessoaComAcesso, PerfilDeAce
         modelBuilder.Entity<Musica>()
             .HasMany(c => c.Generos)
             .WithMany(c => c.Musica!);
+
+        // Definindo a chave primária composta para a tabela de avaliação de artistas
+        modelBuilder.Entity<AvaliacaoArtista>()
+            .HasKey(c => new { c.ArtistaId, c.PessoaId });
     }
 
 }
