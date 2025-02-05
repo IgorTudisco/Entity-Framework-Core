@@ -12,7 +12,7 @@ using ScreenSound.Data;
 namespace ScreenSound.Migrations
 {
     [DbContext(typeof(ScreenSoundContext))]
-    [Migration("20250204153751_AvaliacaoArtistas")]
+    [Migration("20250204212949_AvaliacaoArtistas")]
     partial class AvaliacaoArtistas
     {
         /// <inheritdoc />
