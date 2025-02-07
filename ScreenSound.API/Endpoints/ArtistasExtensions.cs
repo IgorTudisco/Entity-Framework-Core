@@ -22,20 +22,20 @@ public static class ArtistasExtensions
         var groupBuilder = app.MapGroup("artistas").RequireAuthorization().WithTags("Artistas");
 
         // Adiciona um endpoint para a rota /artistas e não é necessário passar o nome do artista. Se não ficaria /artistas/Artistas, mas só queremos /artistas.
-        groupBuilder.MapGet("", ([FromServices] DAL<Artista> dal) =>
+        groupBuilder.MapGet("", ([FromServices] DAL<Artista> dal, [FromServices] DAL<AvaliacaoArtista> dalAvaliacaoArtista) =>
         {
-            var listArtista = EntityListToResponseList(dal.Listar());
+            var listArtista = EntityListToResponseList(dal.Listar(), dalAvaliacaoArtista);
             return Results.Ok(listArtista);
         });
 
-        groupBuilder.MapGet("/{nome}", ([FromServices] DAL<Artista> dal, string nome) =>
+        groupBuilder.MapGet("/{nome}", ([FromServices] DAL<Artista> dal, string nome, [FromServices] DAL<AvaliacaoArtista> dalAvaliacaoArtista) =>
         {
             var artista = dal.FindBy(a => a.Nome.ToUpper().Equals(nome.ToUpper()));
             if (artista is null)
             {
                 return Results.NotFound();
             }
-            var responseArtista = EntityToResponse(artista);
+            var responseArtista = EntityToResponse(artista, dalAvaliacaoArtista);
             return Results.Ok(responseArtista);
         });
 
@@ -101,6 +101,7 @@ public static class ArtistasExtensions
             // Verifica se a pessoa já avaliou o artista, passando o id do artista e o id da pessoa
             var avaliacao = artista.Avaliacoes.FirstOrDefault(a => a.ArtistaId == artista.Id && a.PessoaId == pessoa.Id);
 
+            // Gambiarra. Não consegui fazer funcionar sem isso
             var dalAvaliacao = dalAvaliacaoArtista.FindBy(av => av.ArtistaId == artista.Id && av.PessoaId == pessoa.Id);
 
             avaliacao = dalAvaliacao;
@@ -141,6 +142,7 @@ public static class ArtistasExtensions
             // Busca a avaliação do artista feita pela pessoa, passando o id do artista e o id da pessoa
             var avaliacao = artista.Avaliacoes.FirstOrDefault(a => a.ArtistaId == id && a.PessoaId == pessoa.Id);
 
+            // Gambiarra. Não consegui fazer funcionar sem isso
             var dalAvaliacao = dalAvaliacaoArtista.FindBy(av => av.ArtistaId == id && av.PessoaId == pessoa.Id);
 
             avaliacao = dalAvaliacao;
@@ -161,16 +163,52 @@ public static class ArtistasExtensions
 
     }
 
-    private static ICollection<ArtistaResponse> EntityListToResponseList(IEnumerable<Artista> listaDeArtistas)
+    private static ICollection<ArtistaResponse> EntityListToResponseList(IEnumerable<Artista> listaDeArtistas, [FromServices] DAL<AvaliacaoArtista> dalAvaliacaoArtista)
     {
-        return listaDeArtistas.Select(a => EntityToResponse(a)).ToList();
+        return listaDeArtistas.Select(a => EntityToResponse(a, dalAvaliacaoArtista)).ToList();
     }
 
-    private static ArtistaResponse EntityToResponse(Artista artista)
+    private static ArtistaResponse EntityToResponse(Artista artista, [FromServices] DAL<AvaliacaoArtista> dalAvaliacaoArtista)
     {
         return new ArtistaResponse(artista.Id, artista.Nome, artista.Bio, artista.FotoPerfil)
         {
-            Classificacao = artista.Avaliacoes.Select(a => a.Nota).DefaultIfEmpty(0).Average()
+            //Classificacao = artista.Avaliacoes.Select(a => a.Nota).DefaultIfEmpty(0).Average()
+
+            Classificacao = GetMediaAvaliacao(artista, dalAvaliacaoArtista)
         };
+    }
+
+    // Método que calcula a média das avaliações de um artista
+    // Gambiarra. Não consegui fazer funcionar sem isso
+    private static double? GetMediaAvaliacao(Artista artista, [FromServices] DAL<AvaliacaoArtista> dalAvaliacaoArtista)
+    {        
+        var avaliacoes = dalAvaliacaoArtista.Listar().ToList();
+
+        if (avaliacoes is null) return 0;
+
+        double media = 0;
+        int conta = 0;
+
+        foreach (var ok in avaliacoes)
+        {
+            for(int i = ok.ArtistaId; i <= avaliacoes.Count(); i++)
+            {
+                if (i == artista.Id)
+                {
+                    media += ok.Nota;
+                    conta++;
+                }
+                else
+                {
+                    break;
+                }
+
+            }
+            
+        }
+
+        media = media / conta;
+        return media;
+
     }
 }
