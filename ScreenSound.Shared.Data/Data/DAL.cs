@@ -8,15 +8,17 @@ public class DAL<T> where T : class
 {
 
     private readonly ScreenSoundContext _context;
+    private readonly DbSet<T> _dbSet;
 
     public DAL(ScreenSoundContext context)
     {
         _context = context;
+        _dbSet = _context.Set<T>();
     }
 
     public IEnumerable<T> QueryIncludes(params Expression<Func<T, object?>>[] includes)
     {
-        IQueryable<T> query = _context.Set<T>();
+        IQueryable<T> query = _dbSet;
 
         // Aplica os includes dinâmicos
         foreach (var include in includes)
@@ -29,7 +31,7 @@ public class DAL<T> where T : class
 
     public IEnumerable<T> Listar()
     {
-        return _context.Set<T>().ToList();
+        return _dbSet.ToList();
     }
 
     public IEnumerable<T> Listar(params Expression<Func<T, object?>>[] includes)
@@ -39,13 +41,13 @@ public class DAL<T> where T : class
 
     public void Adicionar(T objeto)
     {
-        _context.Set<T>().Add(objeto);
+        _dbSet.Add(objeto);
         _context.SaveChanges();
     }
 
     public void Atualizar(T objeto)
     {
-        _context.Set<T>().Update(objeto);
+        _dbSet.Update(objeto);
         _context.SaveChanges();
     }
 
@@ -57,7 +59,7 @@ public class DAL<T> where T : class
 
     public T? FindBy(Func<T, bool> condition)
     {
-        var artista = _context.Set<T>().FirstOrDefault(condition);
+        var artista = _dbSet.FirstOrDefault(condition);
         return artista;
     }
 
