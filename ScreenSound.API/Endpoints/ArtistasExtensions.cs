@@ -22,20 +22,20 @@ public static class ArtistasExtensions
         var groupBuilder = app.MapGroup("artistas").RequireAuthorization().WithTags("Artistas");
 
         // Adiciona um endpoint para a rota /artistas e não é necessário passar o nome do artista. Se não ficaria /artistas/Artistas, mas só queremos /artistas.
-        groupBuilder.MapGet("", ([FromServices] DAL<Artista> dal, [FromServices] DAL<AvaliacaoArtista> dalAvaliacaoArtista) =>
+        groupBuilder.MapGet("", ([FromServices] DAL<Artista> dal, [FromServices] DAL<Artista> dalArtista) =>
         {
-            var listArtista = EntityListToResponseList(dal.Listar(), dalAvaliacaoArtista);
+            var listArtista = EntityListToResponseList(dal.Listar(), dalArtista);
             return Results.Ok(listArtista);
         });
 
-        groupBuilder.MapGet("/{nome}", ([FromServices] DAL<Artista> dal, string nome, [FromServices] DAL<AvaliacaoArtista> dalAvaliacaoArtista) =>
+        groupBuilder.MapGet("/{nome}", ([FromServices] DAL<Artista> dal, string nome, [FromServices] DAL<Artista> dalArtista) =>
         {
             var artista = dal.FindBy(a => a.Nome.ToUpper().Equals(nome.ToUpper()));
             if (artista is null)
             {
                 return Results.NotFound();
             }
-            var responseArtista = EntityToResponse(artista, dalAvaliacaoArtista);
+            var responseArtista = EntityToResponse(artista, dalArtista);
             return Results.Ok(responseArtista);
         });
 
@@ -84,41 +84,30 @@ public static class ArtistasExtensions
         });
 
         // Rota que permite avaliar um artista
-        groupBuilder.MapPost("avaliacao", (HttpContext context, [FromBody] AvaliacaoArtistaRequest request, [FromServices] DAL<Artista> dalArtista, [FromServices] DAL<PessoaComAcesso> dalPessoaComAcesso, DAL<AvaliacaoArtista> dalAvaliacaoArtista) =>
+        groupBuilder.MapPost("avaliacao", (HttpContext context, [FromBody] AvaliacaoArtistaRequest request, [FromServices] DAL<Artista> dalArtista, [FromServices] DAL<PessoaComAcesso> dalPessoaComAcesso, [FromServices] DAL<AvaliacaoArtista> dalAvaliacaoArtista) =>
         {
-            var artista = dalArtista.FindBy(a => a.Id == request.ArtistaId);
+            // Updated code to use DAL's Listar method with includes instead of 'Include' on the entity.
+            var artista = dalArtista.Listar(a => a.Avaliacoes).FirstOrDefault(a => a.Id == request.ArtistaId);
 
             if (artista is null) return Results.NotFound();
 
-            // O ?? é um operador de coalescência nula, que retorna o valor da esquerda se não for nulo, senão o valor da direita
             var email = context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value
                 ?? throw new InvalidOperationException("Usuário não autenticado");
 
-            // Se o email não for encontrado, lança uma exceção de InvalidOperationException com a mensagem "Pessoa não encontrada"
             var pessoa = dalPessoaComAcesso.FindBy(p => p.Email!.Equals(email))
                 ?? throw new InvalidOperationException("Pessoa não encontrada");
 
-            // Verifica se a pessoa já avaliou o artista, passando o id do artista e o id da pessoa
             var avaliacao = artista.Avaliacoes.FirstOrDefault(a => a.ArtistaId == artista.Id && a.PessoaId == pessoa.Id);
 
-            // Gambiarra. Não consegui fazer funcionar sem isso
-            var dalAvaliacao = dalAvaliacaoArtista.FindBy(av => av.ArtistaId == artista.Id && av.PessoaId == pessoa.Id);
-
-            avaliacao = dalAvaliacao;
-
-            // Se a avaliação não existir, adiciona a nota
             if (avaliacao is null)
             {
-                // Adiciona a nota
                 artista.AdicionarNota(pessoa.Id, request.Nota);
             }
             else
             {
-                // Se a avaliação existir, atualiza a nota
-                avaliacao.Nota = request.Nota;                
+                avaliacao.Nota = request.Nota;
             }
 
-            // Se a avaliação existir, atualiza a nota
             dalArtista.Atualizar(artista);
 
             return Results.Created();
@@ -128,7 +117,7 @@ public static class ArtistasExtensions
         groupBuilder.MapGet("{id}/avaliacao", (int id, HttpContext context, [FromServices] DAL<Artista> dalArtista, [FromServices] DAL<PessoaComAcesso> dalPessoa, [FromServices] DAL<AvaliacaoArtista> dalAvaliacaoArtista) =>
         {
             // Valida se o artista existe
-            var artista = dalArtista.FindBy(a => a.Id == id);
+            var artista = dalArtista.Listar(a => a.Avaliacoes).FirstOrDefault(a => a.Id == id);
             if (artista is null) return Results.NotFound();
 
             // Verifica se a pessoa está autenticada
@@ -141,11 +130,6 @@ public static class ArtistasExtensions
 
             // Busca a avaliação do artista feita pela pessoa, passando o id do artista e o id da pessoa
             var avaliacao = artista.Avaliacoes.FirstOrDefault(a => a.ArtistaId == id && a.PessoaId == pessoa.Id);
-
-            // Gambiarra. Não consegui fazer funcionar sem isso
-            var dalAvaliacao = dalAvaliacaoArtista.FindBy(av => av.ArtistaId == id && av.PessoaId == pessoa.Id);
-
-            avaliacao = dalAvaliacao;
 
             // Se a avaliação não existir, retorna 0
             if (avaliacao is null)
@@ -163,52 +147,21 @@ public static class ArtistasExtensions
 
     }
 
-    private static ICollection<ArtistaResponse> EntityListToResponseList(IEnumerable<Artista> listaDeArtistas, [FromServices] DAL<AvaliacaoArtista> dalAvaliacaoArtista)
+    private static ICollection<ArtistaResponse> EntityListToResponseList(IEnumerable<Artista> listaDeArtistas, [FromServices] DAL<Artista> dalArtista)
     {
-        return listaDeArtistas.Select(a => EntityToResponse(a, dalAvaliacaoArtista)).ToList();
+        return listaDeArtistas.Select(a => EntityToResponse(a, dalArtista)).ToList();
     }
 
-    private static ArtistaResponse EntityToResponse(Artista artista, [FromServices] DAL<AvaliacaoArtista> dalAvaliacaoArtista)
+    private static ArtistaResponse EntityToResponse(Artista artista, [FromServices] DAL<Artista> dalArtista)
     {
-        return new ArtistaResponse(artista.Id, artista.Nome, artista.Bio, artista.FotoPerfil)
-        {
-            //Classificacao = artista.Avaliacoes.Select(a => a.Nota).DefaultIfEmpty(0).Average()
+        var avaliacoes = dalArtista.Listar(a => a.Avaliacoes).FirstOrDefault(a => a.Id == artista.Id)?.Avaliacoes;
 
-            Classificacao = GetMediaAvaliacao(artista, dalAvaliacaoArtista)
+        var averageNota =  new ArtistaResponse(artista.Id, artista.Nome, artista.Bio, artista.FotoPerfil)
+        {
+            Classificacao = avaliacoes?.Select(a => a.Nota).Average() ?? 0
         };
+
+        return averageNota;
     }
 
-    // Método que calcula a média das avaliações de um artista
-    // Gambiarra. Não consegui fazer funcionar sem isso
-    private static double? GetMediaAvaliacao(Artista artista, [FromServices] DAL<AvaliacaoArtista> dalAvaliacaoArtista)
-    {        
-        var avaliacoes = dalAvaliacaoArtista.Listar().ToList();
-
-        if (avaliacoes is null) return 0;
-
-        double media = 0;
-        int conta = 0;
-
-        foreach (var ok in avaliacoes)
-        {
-            for(int i = ok.ArtistaId; i <= avaliacoes.Count(); i++)
-            {
-                if (i == artista.Id)
-                {
-                    media += ok.Nota;
-                    conta++;
-                }
-                else
-                {
-                    break;
-                }
-
-            }
-            
-        }
-
-        media = media / conta;
-        return media;
-
-    }
 }

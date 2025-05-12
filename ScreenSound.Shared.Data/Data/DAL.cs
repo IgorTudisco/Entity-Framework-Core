@@ -59,11 +59,11 @@ public class DAL<T> where T : class
 
     public T? FindBy(Func<T, bool> condition)
     {
-        var artista = _dbSet.FirstOrDefault(condition);
-        return artista;
+        var obj = _dbSet.FirstOrDefault(condition);
+        return obj;
     }
 
-    public IEnumerable<T> FindBy(Func<T, bool> condicao, params Expression<Func<T, object?>>[] includes)
+    public IEnumerable<T?> FindBy(Func<T, bool> condicao, params Expression<Func<T, object?>>[] includes)
     {
         var list = QueryIncludes(includes);
         return list.Where(condicao).ToList();
