@@ -87,14 +87,6 @@ app.MapPost("auth/logout", async([FromServices] SignInManager<PessoaComAcesso> s
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseCors(x => x.AllowAnyMethod()
-                .AllowAnyHeader()
-                .SetIsOriginAllowed(origin => true)
-                .AllowCredentials()
-);
-
-
-
 app.Run();
 
 

@@ -15,12 +15,12 @@ public class GeneroAPI
 
     public async Task<ICollection<GeneroResponse>?> GetGenerosAsync()
     {
-        return await _httpClient.GetFromJsonAsync<ICollection<GeneroResponse>>("generos");
+        return await _httpClient.GetFromJsonAsync<ICollection<GeneroResponse>>("genero");
     }
 
     public async Task<GeneroResponse?> GetGeneroPorNomeAsync(string nome)
     {
-        return await _httpClient.GetFromJsonAsync<GeneroResponse>($"generos/{nome}");
+        return await _httpClient.GetFromJsonAsync<GeneroResponse>($"genero/{nome}");
     }
 
     public async Task AddGeneroAsync(GeneroRequest generoRequest)
