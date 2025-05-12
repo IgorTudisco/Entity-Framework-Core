@@ -48,7 +48,7 @@ public class AuthAPI(IHttpClientFactory factory) : AuthenticationStateProvider
 
         if (response.IsSuccessStatusCode)
         {
-            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync()); // para exibir o estado de autenticação na tela
             return new AuthResponse { Sucesso = true };
         }
 

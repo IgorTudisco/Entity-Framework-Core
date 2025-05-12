@@ -5,6 +5,7 @@
 @code {
     protected override void OnInitialized()
     {
+        // Redireciona o usuário para a rota que ele estava antes do login
         Navigation.NavigateToLogin($"/login?ReturnUrl={Uri.EscapeDataString(Navigation.Uri)}");
     }
 }

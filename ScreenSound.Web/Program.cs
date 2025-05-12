@@ -34,7 +34,7 @@ builder.Services.AddHttpClient("API", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["APIServer:Url"]!);
     client.DefaultRequestHeaders.Add("Accept", "application/json");
-}).AddHttpMessageHandler<CookieHandler>();
+}).AddHttpMessageHandler<CookieHandler>(); // Faz como que todas as rotas usem o cookie de autenticação (.AddHttpMessageHandler<CookieHandler>();)
 
 await builder.Build().RunAsync();
 
