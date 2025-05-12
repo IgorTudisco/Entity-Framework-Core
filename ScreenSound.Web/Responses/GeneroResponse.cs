@@ -1,6 +1,6 @@
 ﻿namespace ScreenSound.Web.Response;
 
-public record class GeneroResponse(int IdGenero, string? Nome, string? Descricao)
+public record GeneroResponse(int IdGenero, string? Nome, string? Descricao)
 {
     public override string ToString()
     {

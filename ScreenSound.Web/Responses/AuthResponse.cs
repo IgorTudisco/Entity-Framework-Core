@@ -1,6 +1,4 @@
-﻿using System.Net.Http.Json;
-
-namespace ScreenSound.Web.Responses;
+﻿namespace ScreenSound.Web.Responses;
 
 public class AuthResponse
 {

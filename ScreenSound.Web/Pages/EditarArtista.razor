@@ -10,41 +10,48 @@
 
         <MudTextField Class="mt-4" T="string" Placeholder="Nome do Artista"
         Variant="Variant.Outlined"
-        @bind-Value="nome"
+        @bind-Value="Nome"
         Required="true"
         RequiredError="Campo obrigatório." />
 
         <MudTextField Class="mt-4" T="string" Placeholder="Biografia do artista"
         Variant="Variant.Outlined"
-        @bind-Value="biografia"
+        @bind-Value="Biografia"
         Lines="4"
         Required="true"
         RequiredError="Campo obrigatório." />
 
         <div class="d-flex justify-space-between mt-4">
 
-            <MudButton Variant="Variant.Filled"
-            OnClick="Voltar"
-            Color="Color.Secondary"
-            Class="w-100">
-                Voltar
-            </MudButton>
+            <MudRating
+            @bind-SelectedValue="Classificacao"
+            @onclick="AvaliarArtista"
+            />
 
             <div>
                 <MudButton Variant="Variant.Filled"
-                           OnClick="Edit"
-                           Color="Color.Secondary"
-                           Class="w-100">
-                    Editar
+                OnClick="Voltar"
+                Color="Color.Secondary"
+                Class="w-100">
+                    Voltar
                 </MudButton>
 
-                <MudButton Variant="Variant.Filled"
-                           OnClick="Deletar"
-                           Color="Color.Secondary"
-                           Class="w-100 ms-lg-3">
-                    Deletar
-                </MudButton>
-            </div>            
+                <div>
+                    <MudButton Variant="Variant.Filled"
+                    OnClick="Edit"
+                    Color="Color.Secondary"
+                    Class="w-100">
+                        Editar
+                    </MudButton>
+
+                    <MudButton Variant="Variant.Filled"
+                    OnClick="Deletar"
+                    Color="Color.Secondary"
+                    Class="w-100 ms-lg-3">
+                        Deletar
+                    </MudButton>
+                </div>
+            </div>                      
 
         </div>
 
@@ -52,8 +59,9 @@
 </MudPaper>
 
 @code {
-    public string? nome;
-    public string? biografia;
+    public string? Nome;
+    public string? Biografia;
+    public int Classificacao;
     [Parameter]
     public string? NomeArtista { get; set; }
     public ArtistaResponse? Artista { get; set; }
@@ -62,14 +70,14 @@
     protected override async Task OnInitializedAsync()
     {
         Artista = await artistasAPI.GetArtistaPorNomeAsync(NomeArtista!);
-        nome = Artista!.Nome;
-        biografia = Artista!.Bio;
-        
+        Nome = Artista!.Nome;
+        Biografia = Artista!.Bio;
+
     }
 
     private async Task Edit()
     {
-        artistaRequestEdit = new ArtistaRequestEdit(Artista!.Id, nome!, biografia!, Artista!.FotoPerfil);
+        artistaRequestEdit = new ArtistaRequestEdit(Artista!.Id, Nome!, Biografia!, Artista!.FotoPerfil);
         await artistasAPI.EditArtistaAsync(artistaRequestEdit!);
         navigationManager.NavigateTo("/Artistas");
     }
@@ -83,5 +91,10 @@
     private void Voltar()
     {
         navigationManager.NavigateTo("/Artistas");
+    }
+
+    private async Task AvaliarArtista()
+    {
+        await artistasAPI.AvaliaArtistaAsync(Artista!.Id, Classificacao);
     }
 }

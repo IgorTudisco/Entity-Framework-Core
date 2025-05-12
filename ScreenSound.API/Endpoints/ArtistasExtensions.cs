@@ -156,7 +156,7 @@ public static class ArtistasExtensions
     {
         var avaliacoes = dalArtista.Listar(a => a.Avaliacoes).FirstOrDefault(a => a.Id == artista.Id)?.Avaliacoes;
 
-        var averageNota =  new ArtistaResponse(artista.Id, artista.Nome, artista.Bio, artista.FotoPerfil)
+        var averageNota = new ArtistaResponse(artista.Id, artista.Nome, artista.Bio, artista.FotoPerfil)
         {
             Classificacao = avaliacoes?.Select(a => a.Nota).Average() ?? 0
         };
