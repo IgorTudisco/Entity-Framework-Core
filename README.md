@@ -1,25 +1,19 @@
-<h1> <a href="https://cursos.alura.com.br/formacao-csharp-web">Trilha</a> => C# Web: crie aplicações usando ASP.NET </h1>
+# [Trilha](https://cursos.alura.com.br/formacao-csharp-web) => C# Web: crie aplicações usando ASP.NET
 
-<br>
-<br>
-<h2> Cursos da trilha: </h2>
+## Cursos da trilha
 
+- ### .NET: persistindo dados com Entity Framework Core [Link do curso](https://cursos.alura.com.br/course/dot-net-persistindo-dados-entity-framework-core)
 
+  - Certificado [Link](https://cursos.alura.com.br/certificate/igortudisco/dot-net-persistindo-dados-entity-framework-core)
 
-- <h3> .NET: persistindo dados com Entity Framework Core <a href="https://cursos.alura.com.br/course/dot-net-persistindo-dados-entity-framework-core">Link do curso</a></h3>
+- ### .NET: criando uma API Web com ASP.NET Core [Link do curso](https://cursos.alura.com.br/course/dotnet-criando-api-web-asp-net-core)
 
-<p> Certificado <a href="https://cursos.alura.com.br/certificate/igortudisco/dot-net-persistindo-dados-entity-framework-core">Link</a> </p>
+  - Certificado [Link](https://cursos.alura.com.br/certificate/igortudisco/dotnet-criando-api-web-asp-net-core)
 
-<br>
-<br>
+- ### .NET: desenvolvendo uma aplicação web com ASP.NET Core Blazor [Link do curso](https://cursos.alura.com.br/course/dotnet-aplicacao-web-asp-net-core-blazor)
 
-- <h3> .NET: criando uma API Web com ASP.NET Core <a href="https://cursos.alura.com.br/course/dotnet-criando-api-web-asp-net-core">Link do curso</a></h3>
+  - Certificado [Link](https://cursos.alura.com.br/certificate/igortudisco/dotnet-aplicacao-web-asp-net-core-blazor)
 
-<p> Certificado <a href="https://cursos.alura.com.br/certificate/igortudisco/dotnet-criando-api-web-asp-net-core">Link</a> </p>
+- ### ASP.NET: autenticação e autorização em APIs e aplicações web [Link do curso](https://cursos.alura.com.br/course/asp-dotnet-autenticacao-autorizacao-apis-aplicacoes-web)
 
-<br>
-<br>
-
-- <h3> .NET: desenvolvendo uma aplicação web com ASP.NET Core Blazor <a href="https://cursos.alura.com.br/course/dotnet-aplicacao-web-asp-net-core-blazor">Link do curso</a></h3>
-
-<p> Certificado <a href="https://cursos.alura.com.br/certificate/igortudisco/dotnet-aplicacao-web-asp-net-core-blazor">Link</a> </p>
+  - Certificado [Link](https://cursos.alura.com.br/certificate/4f29b3eb-0407-45f7-87ba-c54ce060e789?lang=pt_BR)
