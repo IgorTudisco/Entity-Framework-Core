@@ -117,7 +117,8 @@ public static class ArtistasExtensions
         groupBuilder.MapGet("{id}/avaliacao", (int id, HttpContext context, [FromServices] DAL<Artista> dalArtista, [FromServices] DAL<PessoaComAcesso> dalPessoa, [FromServices] DAL<AvaliacaoArtista> dalAvaliacaoArtista) =>
         {
             // Valida se o artista existe
-            var artista = dalArtista.Listar(a => a.Avaliacoes).FirstOrDefault(a => a.Id == id);
+            var artista = dalArtista.FindBy(a => a.Id == id, a => a.Avaliacoes).FirstOrDefault();
+            // se em algum momento você quiser incluir também o Artista dentro de cada avaliação, adicione um include aninhado assim: a => a.Avaliacoes, a => a.Avaliacoes.Select(av => av.Artista)
             if (artista is null) return Results.NotFound();
 
             // Verifica se a pessoa está autenticada
