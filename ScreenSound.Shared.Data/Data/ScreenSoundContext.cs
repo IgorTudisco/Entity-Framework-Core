@@ -147,3 +147,10 @@ public class ScreenSoundContext : IdentityDbContext<PessoaComAcesso, PerfilDeAce
  
   
  */
+
+
+/*
+ * Dúvidas comuns sobre chave primária composta:
+ * 
+ * https://cursos.alura.com.br/forum/topico-duvida-chave-estrangeira-502559#1766256
+ */
