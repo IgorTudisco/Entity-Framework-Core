@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace ScreenSound.Data;
@@ -67,6 +66,11 @@ public class DAL<T> where T : class
     {
         var list = QueryIncludes(includes);
         return list.Where(condicao).ToList();
+    }
+
+    public IQueryable<T> FindBy()
+    {
+       return _dbSet.AsQueryable();
     }
 }
 

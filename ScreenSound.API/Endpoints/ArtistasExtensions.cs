@@ -166,3 +166,12 @@ public static class ArtistasExtensions
     }
 
 }
+
+
+/*
+ * 
+ * Dúvidas sobre o include:
+ * 
+ * https://cursos.alura.com.br/forum/topico-duvida-nao-estou-conseguindo-persistir-a-nota-no-meu-banco-481357#1766252
+ * 
+ */
