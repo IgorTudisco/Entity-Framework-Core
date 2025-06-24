@@ -68,9 +68,21 @@ public class DAL<T> where T : class
         return list.Where(condicao).ToList();
     }
 
-    public IQueryable<T> FindBy()
+    public IQueryable<T> FindBy(Expression<Func<T, bool>>? filtro = null, params Expression<Func<T, object?>>[] includes)
     {
-       return _dbSet.AsQueryable();
+        IQueryable<T> query = _dbSet;
+
+        foreach (var include in includes)
+        {
+            query = query.Include(include);
+        }
+
+        if (filtro is not null)
+        {
+            query = query.Where(filtro);
+        }
+
+        return query;
     }
 }
 
