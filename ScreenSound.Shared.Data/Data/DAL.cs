@@ -98,3 +98,8 @@ public class DAL<T> where T : class
  * aplicação você pode consultar a documentação oficial (https://learn.microsoft.com/pt-br/dotnet/api/system.func-2?view=net-8.0).
  
  */
+
+
+/*
+ * Dúvidas: https://cursos.alura.com.br/forum/topico-duvida-nao-estou-conseguindo-persistir-a-nota-no-meu-banco-481357#1767728
+ */
