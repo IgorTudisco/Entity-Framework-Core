@@ -72,11 +72,13 @@ public class DAL<T> where T : class
     {
         IQueryable<T> query = _dbSet;
 
+        // Aplica os includes (relacionamentos)
         foreach (var include in includes)
         {
             query = query.Include(include);
         }
 
+        // Aplica o filtro, se houver
         if (filtro is not null)
         {
             query = query.Where(filtro);
